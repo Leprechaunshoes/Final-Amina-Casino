@@ -1,0 +1,79 @@
+/* Cosmic Theme for Amina Casino */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(ellipse at center, #1a0025 0%, #000000 100%);
+  color: #f0f8ff;
+  text-align: center;
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+}
+
+header {
+  padding: 30px 20px;
+  background: linear-gradient(to right, #4b0082, #000000);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+
+#wallet, #balance {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.toggle {
+  margin-top: 10px;
+}
+
+main {
+  padding: 40px 20px;
+}
+
+section#games {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.game {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #4b0082;
+  box-shadow: 0 0 10px #8a2be2;
+}
+
+button {
+  padding: 12px 25px;
+  margin-top: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #8a2be2;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff69b4;
+}
+
+#donate {
+  margin-top: 50px;
+  padding: 20px;
+  border-top: 2px solid #8a2be2;
+}
+
+footer {
+  padding: 20px;
+  background-color: #0a0014;
+  color: #ccc;
+  font-size: 0.9rem;
+}
