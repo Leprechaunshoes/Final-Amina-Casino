@@ -3,86 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Cosmic Casino</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Amina Casino</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <h1>🌌 Amina Cosmic Casino 🌌</h1>
-    <div class="top-bar">
+  <div class="header">
+    <img src="https://i.imgur.com/dYcYQ7E.png" alt="Amina Coin" class="logo" />
+    <h1>Amina Casino</h1>
+    <div class="wallet-actions">
       <button id="connectWallet">Connect Pera Wallet</button>
-      <label class="toggle">
-        <input type="checkbox" id="coinToggle" />
-        <span class="slider"></span>
-        <span class="toggle-label">Play Mode / Amina</span>
-      </label>
+      <span id="walletAddress">Not connected</span>
+      <button id="toggleMode">Switch to Play Money</button>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <section class="game-section">
-      <h2>🎰 Cosmic Slot Machine</h2>
-      <div id="slotMachine" class="slot-machine">
-        <div class="reels">
-          <div class="reel" id="reel1">💫</div>
-          <div class="reel" id="reel2">🪐</div>
-          <div class="reel" id="reel3">🌟</div>
-        </div>
-        <input type="range" id="slotBet" min="0.05" max="1" step="0.05" value="0.25"/>
-        <span class="bet-label">Bet: <span id="slotBetValue">0.25</span></span>
-        <button onclick="spinSlot()">Spin</button>
-        <div id="slotResult"></div>
+  <div class="balance">
+    <h2>Balance: <span id="balance">0</span> <span id="currency">Amina</span></h2>
+  </div>
+
+  <div class="game-section">
+    <h2>Slot Machine</h2>
+    <div class="slot-container">
+      <div id="slotReels">
+        <div class="reel" id="reel1">🍒</div>
+        <div class="reel" id="reel2">🍋</div>
+        <div class="reel" id="reel3">🍊</div>
       </div>
-    </section>
+      <input type="range" id="slotBet" min="0.05" max="1" step="0.05" value="0.25" />
+      <span>Bet: <span id="slotBetValue">0.25</span></span>
+      <button id="spinSlot">Spin</button>
+    </div>
+  </div>
 
-    <section class="game-section">
-      <h2>🃏 Blackjack Table</h2>
-      <div class="blackjack">
-        <div class="table">
-          <div class="dealer">
-            <h3>Dealer</h3>
-            <div id="dealerCards" class="cards"></div>
-          </div>
-          <div class="player">
-            <h3>You</h3>
-            <div id="playerCards" class="cards"></div>
-          </div>
-        </div>
-        <input type="range" id="blackjackBet" min="0.05" max="1" step="0.05" value="0.25"/>
-        <span class="bet-label">Bet: <span id="blackjackBetValue">0.25</span></span>
-        <button onclick="startBlackjack()">Deal</button>
-        <button onclick="hit()">Hit</button>
-        <button onclick="stand()">Stand</button>
-        <div id="blackjackResult"></div>
+  <div class="game-section">
+    <h2>Blackjack</h2>
+    <div class="blackjack-table">
+      <div>
+        <h3>Dealer</h3>
+        <div id="dealerCards" class="card-area"></div>
       </div>
-    </section>
-
-    <section class="game-section">
-      <h2>🪂 Plinko</h2>
-      <div class="plinko">
-        <canvas id="plinkoCanvas" width="300" height="400"></canvas>
-        <input type="range" id="plinkoBet" min="0.05" max="1" step="0.05" value="0.25"/>
-        <span class="bet-label">Bet: <span id="plinkoBetValue">0.25</span></span>
-        <button onclick="dropPlinko()">Drop Ball</button>
-        <div id="plinkoResult"></div>
+      <div>
+        <h3>Player</h3>
+        <div id="playerCards" class="card-area"></div>
       </div>
-    </section>
+    </div>
+    <input type="range" id="blackjackBet" min="0.05" max="1" step="0.05" value="0.25" />
+    <span>Bet: <span id="blackjackBetValue">0.25</span></span>
+    <div class="blackjack-buttons">
+      <button id="deal">Deal</button>
+      <button id="hit">Hit</button>
+      <button id="stand">Stand</button>
+    </div>
+  </div>
 
-    <section class="balance-section">
-      <h3>Balance</h3>
-      <div id="balanceDisplay">House Coins: 1000</div>
-    </section>
-  </main>
+  <div class="game-section">
+    <h2>Plinko</h2>
+    <div id="plinkoBoard"></div>
+    <input type="range" id="plinkoBet" min="0.05" max="1" step="0.05" value="0.25" />
+    <span>Bet: <span id="plinkoBetValue">0.25</span></span>
+    <button id="dropPlinko">Drop Ball</button>
+    <div id="plinkoResult"></div>
+  </div>
 
-  <footer>
-    <p>Donate to support Amina Casino: <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code></p>
-    <button onclick="playMusic()">🔊 Play Popcorn</button>
-    <button onclick="stopMusic()">🔇 Stop Music</button>
-    <audio id="popcornAudio" loop>
-      <source src="https://archive.org/download/popcorn_202104/Popcorn.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
+  <div class="donate">
+    <button id="donateButton">Donate Amina</button>
+    <p>Wallet: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
+  </div>
+
+  <div class="music-controls">
+    <button id="playMusic">Play Popcorn</button>
+    <button id="stopMusic">Stop Music</button>
+    <audio id="bgMusic" loop>
+      <source src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_003bc01404.mp3?filename=popcorn-110999.mp3" type="audio/mp3">
     </audio>
-  </footer>
+  </div>
 
   <script src="scripts.js"></script>
 </body>
