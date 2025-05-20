@@ -1,119 +1,236 @@
+/* --- GENERAL STYLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@400&display=swap');
+
 body {
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #0b0c2a 0%, #000000 100%);
-  color: #fff;
-  text-align: center;
+  padding: 0;
+  background: radial-gradient(circle at center, #0b0033, #14002c, #0b0033);
+  color: #e0e0ff;
+  font-family: 'Roboto', sans-serif;
+  user-select: none;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   padding: 20px;
 }
 
+/* Container for the entire casino */
+#casino {
+  max-width: 1100px;
+  width: 100%;
+  background: linear-gradient(135deg, #1c0033, #28004d);
+  border-radius: 18px;
+  box-shadow: 0 0 25px #5500cc, 0 0 40px #aa00ff;
+  padding: 30px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+  color: #ddd;
+}
+
+/* Header */
 h1 {
-  font-size: 48px;
-  color: #ffe600;
-  text-shadow: 0 0 12px #ff00f7;
-  margin-bottom: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  color: #9f7bff;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px #aa00ff;
 }
 
-h2 {
-  font-size: 28px;
-  color: #80ffea;
-  margin-top: 40px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 8px #00f0ff;
+/* Wallet display */
+#walletBalance {
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 25px;
+  color: #c3baff;
+  text-shadow: 0 0 8px #7f6fff;
 }
 
-p, label {
-  font-size: 18px;
-  margin: 5px 0;
-}
-
-button, input[type=range], input[type=number] {
-  padding: 10px 20px;
-  margin: 10px;
-  background: #0f0f3d;
+/* Toggle Button for HC / Amina */
+#toggleHC {
+  display: block;
+  margin: 0 auto 30px auto;
+  background: #7e00ff;
   color: white;
-  border: 2px solid #ffe600;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  box-shadow: 0 0 15px #b05aff;
+  transition: background 0.3s ease;
+}
+#toggleHC:hover {
+  background: #aa33ff;
 }
 
-button:hover {
-  background: #1a1a5f;
-  transform: scale(1.05);
-}
-
-.container {
+/* --- GAME SECTIONS --- */
+.game-section {
+  background: linear-gradient(145deg, #270059, #41007d);
+  border-radius: 20px;
+  padding: 22px 30px 30px 30px;
+  flex: 1 1 320px;
+  min-width: 320px;
+  box-shadow: 0 0 18px #9200f7, inset 0 0 10px #7b00d6;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  color: #dcdcff;
 }
 
-.balance-box {
-  margin-top: 20px;
-  padding: 15px;
-  background: #1a1a3d;
+/* Game Titles */
+.game-section h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+  color: #bb88ff;
+  text-shadow: 0 0 12px #a073ff;
+}
+
+/* Input styles */
+input[type=number] {
+  width: 80px;
+  padding: 8px 12px;
+  font-size: 1.1rem;
   border-radius: 12px;
-  border: 2px solid #ffe600;
-  width: 300px;
+  border: none;
+  text-align: center;
+  background: #2a0055;
+  color: #ccc;
+  box-shadow: inset 0 0 8px #5600ff;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+input[type=number]:focus {
+  outline: none;
+  box-shadow: 0 0 10px #9f79ff;
 }
 
-.game-box {
-  background: #101026;
-  border: 2px solid #ffe600;
-  border-radius: 12px;
-  padding: 30px;
-  width: 90%;
-  max-width: 700px;
-  box-shadow: 0 0 20px #ffe60060;
+/* Buttons */
+button {
+  background: #6600cc;
+  color: #eee;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  padding: 12px 28px;
+  margin: 10px 6px 0 6px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #bb00ff;
+  transition: background 0.25s ease;
+  user-select: none;
+}
+button:hover:not(:disabled) {
+  background: #aa33ff;
+  box-shadow: 0 0 20px #ee00ff;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
 }
 
-.reels {
-  font-size: 60px;
+/* --- SLOT MACHINE --- */
+
+#slotReels {
   display: flex;
   justify-content: center;
-  gap: 40px;
-  margin: 20px 0;
-}
-
-.cards {
-  font-size: 36px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-}
-
-input[type=range] {
-  width: 200px;
-}
-
-#plinkoResult {
-  font-size: 18px;
-  color: #00ffbf;
+  gap: 18px;
   margin-top: 15px;
 }
 
-footer {
-  margin-top: 60px;
-  font-size: 14px;
-  color: #aaa;
+.slot-reel {
+  width: 85px;
+  height: 85px;
+  font-size: 5rem;
+  line-height: 85px;
+  text-align: center;
+  border-radius: 15px;
+  background: radial-gradient(circle at center, #7f00ff, #330066);
+  color: #f5f0ff;
+  box-shadow: 0 0 25px #b36eff inset;
+  user-select: none;
+  font-family: 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', sans-serif;
+  text-shadow: 0 0 8px #cc99ff;
 }
 
-#playMusic, #stopMusic {
-  background: #370066;
-  border-color: #ff00f7;
+/* --- BLACKJACK --- */
+
+#blackjackTable {
+  background: radial-gradient(circle at center, #170035, #3b0074);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 340px;
+  padding: 18px 20px 25px 20px;
+  box-shadow: 0 0 25px #8000cc inset;
+  color: #ddd;
 }
 
-#toggleMode {
-  background: #004f4f;
-  border-color: #00ffe1;
+#dealerHand, #playerHand {
+  background: #2e004d;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+  font-family: 'Orbitron', monospace;
+  text-align: center;
+  text-shadow: 0 0 6px #bb77ff;
+  min-height: 50px;
+  user-select: none;
 }
 
-/* Popcorn music icon fix */
-audio {
-  display: none;
+#blackjackStatus {
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: #ccaaff;
+  text-shadow: 0 0 10px #a160ff;
+}
+
+/* --- PLINKO --- */
+
+#plinkoCanvas {
+  border-radius: 18px;
+  background: radial-gradient(circle at center, #1c0055, #330077);
+  box-shadow: 0 0 30px #a377ff inset;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  user-select: none;
+}
+
+/* Plinko results */
+#plinkoResult {
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #bbaaff;
+  text-align: center;
+  text-shadow: 0 0 6px #bb88ff;
+  min-height: 28px;
+}
+
+/* --- RESPONSIVENESS --- */
+@media screen and (max-width: 980px) {
+  #casino {
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-section {
+    width: 90vw;
+    min-width: unset;
+  }
 }
