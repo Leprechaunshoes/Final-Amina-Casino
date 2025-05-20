@@ -1,152 +1,204 @@
-// Basic globals
-let balance = 0;
-let mode = "HC"; // or "Amina"
-let houseRake = 0.05;
-let audio = new Audio("https://upload.wikimedia.org/wikipedia/commons/3/3f/Popcorn_song.ogg");
+let mode = "HC";
+let balance = 1000;
+let bet = 0.25;
+let connectedWallet = null;
+let audio = document.getElementById("popcornAudio");
 
-// Play money system
-function getDailyCoins() {
-  if (localStorage.getItem("lastClaim") !== new Date().toDateString()) {
-    balance += 1000;
-    localStorage.setItem("lastClaim", new Date().toDateString());
-    updateBalance();
-    alert("You received 1000 House Coins!");
-  } else {
-    alert("Come back tomorrow!");
-  }
-}
+const betSlider = document.getElementById("betSlider");
+const betAmount = document.getElementById("betAmount");
+const balanceDisplay = document.getElementById("balance");
+const currencyDisplay = document.getElementById("currency");
 
-// Toggle between Amina and HC
-function toggleMode() {
+document.getElementById("betSlider").addEventListener("input", (e) => {
+  bet = parseFloat(e.target.value);
+  betAmount.innerText = bet.toFixed(2);
+});
+
+function toggleMoneyMode() {
   mode = mode === "HC" ? "Amina" : "HC";
-  document.getElementById("modeDisplay").textContent = mode;
+  currencyDisplay.textContent = mode;
+  document.getElementById("moneyMode").textContent = mode;
+  if (mode === "HC") {
+    balance = 1000;
+  }
   updateBalance();
 }
 
-// Wallet connect (mocked)
-function connectWallet() {
-  alert("Connecting to Pera Wallet...");
-  document.getElementById("walletStatus").textContent = "Wallet Connected";
-}
-
-// Update balance
 function updateBalance() {
-  document.getElementById("balanceDisplay").textContent = `${balance.toFixed(2)} ${mode}`;
+  balanceDisplay.textContent = balance.toFixed(2);
 }
 
-// Donation button
-function donate() {
-  window.open("https://www.perawallet.app", "_blank");
-}
-
-// Music controls
-function toggleMusic(play) {
-  if (play) {
-    audio.loop = true;
+function toggleMusic() {
+  if (audio.paused) {
     audio.play();
   } else {
     audio.pause();
   }
 }
 
-// BETTING
-function getBet() {
-  return Math.min(1, parseFloat(document.getElementById("betSlider").value));
+function connectWallet() {
+  // Placeholder: full integration to be implemented
+  connectedWallet = "Your-Pera-Wallet-Address";
+  document.getElementById("walletAddress").textContent = connectedWallet;
+  alert("Pera Wallet connected!");
 }
 
-function canPlay(bet) {
-  if (mode === "HC") return balance >= bet;
-  else {
-    alert("Live Amina transactions not enabled yet.");
-    return false;
-  }
+function donate() {
+  window.open("https://www.algoscan.app/address/6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI", "_blank");
 }
 
-function deductBet(bet) {
-  balance -= bet;
-  let rake = bet * houseRake;
-  balance -= rake;
-}
+// 🎰 SLOT MACHINE
+function spinSlot() {
+  if (balance < bet) return alert("Insufficient funds!");
+  const symbols = ["🌕", "🪐", "🌟", "🚀", "👽"];
+  const reel1 = symbols[Math.floor(Math.random() * symbols.length)];
+  const reel2 = symbols[Math.floor(Math.random() * symbols.length)];
+  const reel3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-// Slot Machine
-function playSlot() {
-  let bet = getBet();
-  if (!canPlay(bet)) return;
+  document.getElementById("reel1").textContent = reel1;
+  document.getElementById("reel2").textContent = reel2;
+  document.getElementById("reel3").textContent = reel3;
 
-  const reels = ["🍒", "🍋", "🔔", "⭐", "💎"];
-  let slot = [];
-  for (let i = 0; i < 3; i++) {
-    slot.push(reels[Math.floor(Math.random() * reels.length)]);
-  }
-
-  document.getElementById("slotResult").textContent = slot.join(" ");
-  deductBet(bet);
-  if (slot[0] === slot[1] && slot[1] === slot[2]) {
+  if (reel1 === reel2 && reel2 === reel3) {
     balance += bet * 5;
-    alert("Jackpot! You win!");
-  }
-
-  updateBalance();
-}
-
-// Blackjack
-function playBlackjack() {
-  let bet = getBet();
-  if (!canPlay(bet)) return;
-
-  const cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
-  const draw = () => cards[Math.floor(Math.random() * cards.length)];
-
-  let player = draw() + draw();
-  let dealer = draw() + draw();
-
-  document.getElementById("blackjackResult").textContent = `Player: ${player} | Dealer: ${dealer}`;
-
-  deductBet(bet);
-  if (player > dealer || dealer > 21) {
-    balance += bet * 2;
-    alert("You win!");
-  } else if (player === dealer) {
-    balance += bet;
-    alert("Push.");
   } else {
-    alert("You lose.");
+    balance -= bet;
   }
-
   updateBalance();
 }
 
-// Plinko (simple logic)
-function playPlinko() {
-  let bet = getBet();
-  if (!canPlay(bet)) return;
+// 🃏 BLACKJACK
+let deck = [], playerHand = [], dealerHand = [];
 
-  let pegs = 8;
-  let position = 0;
-  for (let i = 0; i < pegs; i++) {
-    position += Math.random() < 0.5 ? -1 : 1;
+function createDeck() {
+  const suits = ['♠', '♥', '♦', '♣'];
+  const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+  deck = [];
+  for (let suit of suits) {
+    for (let rank of ranks) {
+      deck.push({ rank, suit });
+    }
   }
+  deck.sort(() => Math.random() - 0.5);
+}
 
-  let multiplier = 0;
-  switch (position) {
-    case -8: case 8: multiplier = 0.5; break;
-    case -6: case 6: multiplier = 1; break;
-    case -4: case 4: multiplier = 2; break;
-    case 0: multiplier = 10; break;
-    default: multiplier = 0.2; break;
+function drawCard() {
+  return deck.pop();
+}
+
+function calculateScore(hand) {
+  let score = 0;
+  let aces = 0;
+  for (let card of hand) {
+    if (['J', 'Q', 'K'].includes(card.rank)) score += 10;
+    else if (card.rank === 'A') {
+      score += 11;
+      aces += 1;
+    } else score += parseInt(card.rank);
   }
+  while (score > 21 && aces) {
+    score -= 10;
+    aces -= 1;
+  }
+  return score;
+}
 
-  let win = bet * multiplier;
-  balance += win;
+function renderHand(elementId, hand) {
+  const el = document.getElementById(elementId);
+  el.innerHTML = '';
+  hand.forEach(card => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = `${card.rank}${card.suit}`;
+    el.appendChild(div);
+  });
+}
 
-  document.getElementById("plinkoResult").textContent = `Ball landed: ${position} | Multiplier: ${multiplier}x | Winnings: ${win.toFixed(2)}`;
-  deductBet(bet);
+function startBlackjack() {
+  if (balance < bet) return alert("Not enough to bet!");
+  createDeck();
+  playerHand = [drawCard(), drawCard()];
+  dealerHand = [drawCard(), drawCard()];
+  renderHand("playerHand", playerHand);
+  renderHand("dealerHand", [dealerHand[0], { rank: "?", suit: "?" }]);
+}
+
+function hit() {
+  playerHand.push(drawCard());
+  renderHand("playerHand", playerHand);
+  if (calculateScore(playerHand) > 21) {
+    alert("Bust! Dealer wins.");
+    balance -= bet;
+    updateBalance();
+  }
+}
+
+function stand() {
+  renderHand("dealerHand", dealerHand);
+  while (calculateScore(dealerHand) < 17) {
+    dealerHand.push(drawCard());
+    renderHand("dealerHand", dealerHand);
+  }
+  const playerScore = calculateScore(playerHand);
+  const dealerScore = calculateScore(dealerHand);
+
+  if (dealerScore > 21 || playerScore > dealerScore) {
+    alert("You win!");
+    balance += bet;
+  } else if (playerScore < dealerScore) {
+    alert("Dealer wins!");
+    balance -= bet;
+  } else {
+    alert("Push!");
+  }
   updateBalance();
 }
 
-// Init
-window.onload = () => {
-  balance = 1000;
-  updateBalance();
-  document.getElementById("modeDisplay").textContent = mode;
-};
+// 🔻 PLINKO
+const canvas = document.getElementById("plinkoCanvas");
+const ctx = canvas.getContext("2d");
+let ball = null;
+
+function drawBoard() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  for (let y = 50; y < 350; y += 50) {
+    for (let x = y % 100 === 0 ? 25 : 50; x < 300; x += 50) {
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function dropPlinko() {
+  if (balance < bet) return alert("Not enough!");
+  ball = { x: 150, y: 0, vy: 2 };
+  animateBall();
+}
+
+function animateBall() {
+  if (!ball) return;
+  drawBoard();
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
+  ctx.fillStyle = "yellow";
+  ctx.fill();
+  ball.y += ball.vy;
+
+  if (ball.y < 350) {
+    requestAnimationFrame(animateBall);
+  } else {
+    let zone = Math.floor(ball.x / 50);
+    const multipliers = [0, 0.5, 1, 2, 1, 0.5];
+    const multiplier = multipliers[zone] || 0;
+    const result = bet * multiplier;
+    balance += result - bet;
+    updateBalance();
+    document.getElementById("plinkoResult").textContent = `Won ${result.toFixed(2)} ${mode}`;
+    ball = null;
+  }
+}
+
+drawBoard();
+updateBalance();
