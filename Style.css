@@ -1,62 +1,44 @@
 body {
-  margin: 0;
-  font-family: 'Trebuchet MS', sans-serif;
-  background: radial-gradient(circle at top, #000022, #110022, #000000);
-  color: #f2f2f2;
-  text-align: center;
-}
-
-header {
-  padding: 1rem;
-  background: linear-gradient(90deg, #1f0066, #4b0082);
+  background: radial-gradient(circle at top, #000015, #0a0a2a);
   color: #ffffff;
-}
-
-h1 {
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
   margin: 0;
-  font-size: 2rem;
+  padding: 0;
 }
 
-main {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.header {
+  background: linear-gradient(to right, #003366, #001122);
+  padding: 20px;
 }
 
 .game {
-  background: #1a1a2e;
-  border: 1px solid #888;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #111122;
   border-radius: 10px;
-  padding: 1rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 20px #00ffff55;
 }
 
 button {
-  padding: 0.5rem 1rem;
-  background: #ff9900;
+  background-color: #00ffff;
+  color: #000;
   border: none;
-  color: white;
-  font-size: 1rem;
-  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 button:hover {
-  background: #ffcc00;
+  background-color: #00dddd;
 }
 
 footer {
-  background: #0b0b2e;
-  padding: 1rem;
-  font-size: 0.9rem;
-}
-
-a {
-  color: #00ffcc;
-  text-decoration: none;
-}
-
-#modeToggle {
-  margin: 1rem;
-  font-size: 1rem;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #000022;
+  color: #888;
 }
