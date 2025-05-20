@@ -1,72 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Amina Casino</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <img src="https://i.imgur.com/HBSxH7S.png" alt="Amina Coin" class="coin-logo">
-    <h1>Amina Casino 🌌</h1>
-    <div class="wallet">
-      <label class="toggle-container">
-        <input type="checkbox" id="toggle-money">
-        <span id="toggle-label">Play Money</span>
-      </label>
-      <div class="balance">
-        <strong id="currency-symbol">HC</strong>: <span id="balance-amount">1000</span>
-      </div>
-      <div id="wallet-display" class="wallet-address"></div>
-    </div>
-  </header>
+  <div class="header">
+    <img src="https://i.imgur.com/1Uz1c8G.png" alt="Amina Coin" class="logo" />
+    <h1>🎰 Amina Casino 🌌</h1>
+    <p id="walletStatus">Connect Wallet</p>
+    <button onclick="connectWallet()">🔌 Connect Pera Wallet</button>
+    <button onclick="togglePlayMode()">💰 Toggle Play Money</button>
+    <p id="balance">Balance: 0</p>
+  </div>
 
-  <main>
-    <section id="blackjack" class="game">
-      <h2>🂡 Blackjack</h2>
-      <input type="number" id="bj-bet" value="0.25" step="0.01" min="0.25">
-      <button id="btn-bj-new">New Game</button>
-      <button id="btn-bj-hit" disabled>Hit</button>
-      <button id="btn-bj-stand" disabled>Stand</button>
-      <div class="card-area">
-        <div><strong>Dealer:</strong><div id="dealer-cards" class="cards"></div></div>
-        <div><strong>You:</strong><div id="player-cards" class="cards"></div></div>
+  <div class="game-container">
+    <!-- Blackjack -->
+    <section class="game">
+      <h2>♠ Blackjack</h2>
+      <div class="blackjack-table">
+        <div id="dealer-hand" class="card-hand"></div>
+        <div id="player-hand" class="card-hand"></div>
       </div>
-      <div id="bj-result" class="result-text"></div>
+      <div class="controls">
+        <button onclick="placeBet('blackjack')">Bet 0.25</button>
+        <button onclick="hit()">Hit</button>
+        <button onclick="stand()">Stand</button>
+        <p id="blackjack-result"></p>
+      </div>
     </section>
 
-    <section id="slots" class="game">
+    <!-- Slot Machine -->
+    <section class="game">
       <h2>🎰 Slot Machine</h2>
-      <input type="number" id="slot-bet" value="0.25" step="0.01" min="0.25">
-      <button id="btn-slot-spin">Spin</button>
-      <div class="slots-display">
-        <span id="slot1">❔</span>
-        <span id="slot2">❔</span>
-        <span id="slot3">❔</span>
-      </div>
-      <div id="slot-result" class="result-text"></div>
+      <div id="slot-display" class="slot-display">🍒 🍋 🍇</div>
+      <button onclick="playSlot()">Spin 0.25</button>
+      <p id="slot-result"></p>
     </section>
 
-    <section id="plinko" class="game">
-      <h2>🪩 Plinko</h2>
-      <input type="number" id="plinko-bet" value="0.25" step="0.01" min="0.25">
-      <button id="btn-plinko-drop">Drop Chip</button>
-      <div id="plinko-board">
-        <div id="plinko-chip">⬤</div>
-      </div>
-      <div id="plinko-result" class="result-text"></div>
+    <!-- Plinko -->
+    <section class="game">
+      <h2>🟣 Plinko</h2>
+      <div class="plinko-board" id="plinko-board"></div>
+      <button onclick="playPlinko()">Drop Ball (0.25)</button>
+      <p id="plinko-result"></p>
     </section>
-  </main>
+  </div>
 
-  <footer>
-    <button id="btn-donate">💖 Donate Amina</button>
-    <audio id="bg-music" autoplay loop>
+  <div class="footer">
+    <audio id="popcornAudio" loop>
       <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-      Your browser does not support audio.
+      Your browser does not support the audio element.
     </audio>
-    <button id="btn-music-toggle">🔊 Stop Music</button>
-    <p>Built with love in the cosmos.</p>
-  </footer>
+    <button onclick="toggleMusic()">🎵 Toggle Popcorn Song</button>
+    <button onclick="donate()">🙏 Donate</button>
+  </div>
 
   <script src="scripts.js"></script>
 </body>
