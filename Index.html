@@ -3,45 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Amina Casino v7</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="header">
-    <h1>🌌 Amina Casino v7</h1>
-    <button onclick="connectWallet()">🔗 Connect Pera Wallet</button>
-    <p id="walletStatus">Wallet not connected</p>
-    <label>
-      Use House Coin (HC):
-      <input type="checkbox" id="hcToggle" onchange="toggleCurrency()" />
-    </label>
-  </div>
+  <header>
+    <h1>🚀 Amina Casino 🎰</h1>
+    <p class="subtitle">Cosmic luck awaits, Captain!</p>
+    <div id="walletStatus">Not Connected</div>
+    <button onclick="connectWallet()">Connect Pera Wallet</button>
+  </header>
 
-  <div class="game" id="slot">
-    <h2>🎰 Slot Machine</h2>
-    <div id="slotReels">[ ? ] [ ? ] [ ? ]</div>
-    <button onclick="playSlot()">Spin (0.25)</button>
-    <p id="slotResult"></p>
-  </div>
+  <nav>
+    <button onclick="showGame('blackjack')">♠️ Blackjack</button>
+    <button onclick="showGame('slots')">🎰 Slot Machine</button>
+    <button onclick="showGame('plinko')">🟡 Plinko</button>
+  </nav>
 
-  <div class="game" id="blackjack">
-    <h2>🃏 Blackjack</h2>
-    <p>Player: <span id="playerHand"></span></p>
-    <p>Dealer: <span id="dealerHand"></span></p>
-    <button onclick="hit()">Hit</button>
-    <button onclick="stand()">Stand</button>
-    <p id="blackjackResult"></p>
-  </div>
+  <main>
+    <section id="blackjack" class="game">
+      <h2>Blackjack Table</h2>
+      <div class="blackjack-table">
+        <div>
+          <h3>Dealer</h3>
+          <div id="dealer-cards" class="cards"></div>
+        </div>
+        <div>
+          <h3>You</h3>
+          <div id="player-cards" class="cards"></div>
+        </div>
+        <div class="controls">
+          <button onclick="startBlackjack()">Deal</button>
+          <button onclick="hit()">Hit</button>
+          <button onclick="stand()">Stand</button>
+        </div>
+        <p id="blackjack-result"></p>
+      </div>
+    </section>
 
-  <div class="game" id="plinko">
-    <h2>🟢 Plinko</h2>
-    <button onclick="dropPlinko()">Drop Chip</button>
-    <p id="plinkoResult"></p>
-  </div>
+    <section id="slots" class="game hidden">
+      <h2>Slot Machine</h2>
+      <div class="slot-machine">
+        <div id="slot-reels">🍒 🍋 🔔</div>
+        <button onclick="spinSlot()">Spin</button>
+        <p id="slot-result"></p>
+      </div>
+    </section>
+
+    <section id="plinko" class="game hidden">
+      <h2>Plinko</h2>
+      <div class="plinko-board">
+        <button onclick="dropPlinko()">Drop Chip</button>
+        <p id="plinko-result"></p>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    <button onclick="donate()">💸 Donate</button>
-    <p>Amina Casino • Built with ❤️</p>
+    <p>© 2025 Amina Casino • Built with 🚀 & 🔥</p>
+    <p>Donations: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
   </footer>
 
   <script src="scripts.js"></script>
