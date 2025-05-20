@@ -1,61 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Amina Casino v6</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>🌌 Amina Casino v6 🎰</h1>
-    <p>Welcome, Captain! Let the games begin.</p>
-    <div id="wallet">Wallet: <span id="wallet-address">Not connected</span></div>
-    <div id="balance">Balance: <span id="balance">--</span> Amina</div>
-    <button onclick="connectWallet()">🔗 Connect Wallet</button>
-    <div class="toggle">
-      <label>
-        <input type="checkbox" id="currencyToggle" onchange="toggleCurrency()">
-        Use House Coins (HC)
-      </label>
-    </div>
+    <h1>🌌 Amina Casino 🎰</h1>
+    <button id="connectWallet">🔌 Connect Pera Wallet</button>
+    <div id="walletAddress"></div>
   </header>
 
+  <section id="modeToggle">
+    <label><input type="radio" name="currency" value="amina" checked /> Amina</label>
+    <label><input type="radio" name="currency" value="hc" /> House Coin</label>
+  </section>
+
   <main>
-    <section id="games">
-      <h2>🎲 Games</h2>
-      <div class="game" id="slot">
-        <h3>Slot Machine</h3>
-        <button onclick="playSlot()">Spin 🎰</button>
-        <p id="slot-result">Result: -</p>
-      </div>
+    <div class="game" id="slotGame">
+      <h2>🎰 Slot Machine</h2>
+      <button onclick="playSlot()">Spin</button>
+      <div id="slotResult"></div>
+    </div>
 
-      <div class="game" id="blackjack">
-        <h3>Blackjack</h3>
-        <button onclick="playBlackjack()">Play 🃏</button>
-        <p id="blackjack-result">Result: -</p>
-      </div>
+    <div class="game" id="blackjackGame">
+      <h2>🃏 Blackjack</h2>
+      <button onclick="playBlackjack()">Play</button>
+      <div id="blackjackResult"></div>
+    </div>
 
-      <div class="game" id="plinko">
-        <h3>Plinko</h3>
-        <button onclick="playPlinko()">Drop Ball 🪙</button>
-        <p id="plinko-result">Result: -</p>
-      </div>
-    </section>
-
-    <section id="donate">
-      <h2>💖 Support the Casino</h2>
-      <p>Send a donation to:</p>
-      <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code>
-    </section>
+    <div class="game" id="plinkoGame">
+      <h2>🪙 Plinko</h2>
+      <button onclick="playPlinko()">Drop</button>
+      <div id="plinkoResult"></div>
+    </div>
   </main>
 
   <footer>
-    <p>Made with 🚀 by the Captain and Crew of Amina Casino</p>
-    <audio autoplay loop>
-      <source src="popcorn.mp3" type="audio/mpeg">
-    </audio>
+    <button onclick="toggleMusic()">🎵 Toggle Music</button>
+    <a href="https://app.perawallet.com" target="_blank">💰 Donate (6ZL5LU...BASYI)</a>
   </footer>
 
+  <audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-game-level-music-689.mp3" loop></audio>
   <script src="scripts.js"></script>
 </body>
 </html>
