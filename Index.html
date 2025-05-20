@@ -1,62 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Amina Casino 🚀</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amina Cosmic Casino</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>🌌 Amina Casino</h1>
-    <p>Cosmic Games. Real Winnings.</p>
-    <button id="connectWallet">🔗 Connect Pera Wallet</button>
-    <button id="toggleCurrency">💰 Toggle: Amina / House Coin</button>
-    <p id="balance">Balance: --</p>
-  </header>
+    <div class="container">
+        <h1>Amina Cosmic Casino</h1>
+        <button id="connect-wallet">Connect Pera Wallet</button>
+        <p id="wallet-status">Wallet not connected</p>
+        
+        <button onclick="toggleMoney()">Toggle Amina/Play Money</button>
 
-  <section id="games">
-    <div id="slotMachine" class="game-panel">
-      <h2>🎰 Slot Machine</h2>
-      <div class="slot-reels">
-        <div class="reel" id="reel1">🍒</div>
-        <div class="reel" id="reel2">🍋</div>
-        <div class="reel" id="reel3">🔔</div>
-      </div>
-      <input type="range" min="0.01" max="1" step="0.01" value="0.25" id="slotBet">
-      <span>Bet: <span id="slotBetAmount">0.25</span> </span>
-      <button onclick="spinSlot()">Pull Lever</button>
+        <div class="game">
+            <h2>Slot Machine</h2>
+            <button onclick="playSlot()">Play Slot</button>
+        </div>
+
+        <div class="game">
+            <h2>Blackjack</h2>
+            <button onclick="playBlackjack()">Play Blackjack</button>
+        </div>
+
+        <div class="game">
+            <h2>Plinko</h2>
+            <button onclick="playPlinko()">Play Plinko</button>
+        </div>
+
+        <div id="result"></div>
+
+        <div class="donate">
+            <h3>Donate</h3>
+            <p>Algorand Address: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
+        </div>
     </div>
-
-    <div id="blackjack" class="game-panel">
-      <h2>🃏 Blackjack</h2>
-      <canvas id="blackjackCanvas" width="300" height="200"></canvas>
-      <input type="range" min="0.01" max="1" step="0.01" value="0.25" id="bjBet">
-      <span>Bet: <span id="bjBetAmount">0.25</span></span>
-      <div>
-        <button onclick="startBlackjack()">Deal</button>
-        <button onclick="hit()">Hit</button>
-        <button onclick="stand()">Stand</button>
-      </div>
-    </div>
-
-    <div id="plinko" class="game-panel">
-      <h2>🔘 Plinko</h2>
-      <canvas id="plinkoCanvas" width="300" height="300"></canvas>
-      <input type="range" min="0.01" max="1" step="0.01" value="0.25" id="plinkoBet">
-      <span>Bet: <span id="plinkoBetAmount">0.25</span></span>
-      <button onclick="dropPlinkoBall()">Drop Ball</button>
-    </div>
-  </section>
-
-  <footer>
-    <button onclick="donate()">❤️ Donate</button>
-    <button onclick="toggleMusic()">🔊 Toggle Music</button>
-    <audio id="popcorn" loop autoplay>
-      <source src="https://files.catbox.moe/6vfq3a.mp3" type="audio/mpeg">
-    </audio>
-    <p>&copy; 2025 Amina Casino | Powered by Stars</p>
-  </footer>
-
-  <script src="scripts.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
