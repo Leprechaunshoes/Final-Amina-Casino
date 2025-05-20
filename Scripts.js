@@ -1,181 +1,276 @@
-let walletConnected = false;
-let playMoneyMode = false;
-let balance = 10; // Default real balance
-let playBalance = 1000;
-let currentCurrency = 'Amina';
+// ===== GLOBAL SETTINGS =====
+let walletBalance = 10.0;  // Starting Amina Coins
+let houseCoinsBalance = 1000; // Play money for HC mode
+let useHouseCoins = false; // Toggle between real and play money
+const rakePercent = 0.05;  // 5% house rake
 
-// 🎵 Music controls
-const bgMusic = document.getElementById("bgMusic");
-document.getElementById("playMusic").onclick = () => bgMusic.play();
-document.getElementById("stopMusic").onclick = () => bgMusic.pause();
-
-// 🎮 Play Money Toggle
-document.getElementById("toggleMode").onclick = () => {
-  playMoneyMode = !playMoneyMode;
-  document.getElementById("currency").innerText = playMoneyMode ? 'House Coin' : 'Amina';
-  document.getElementById("balance").innerText = playMoneyMode ? playBalance.toFixed(2) : balance.toFixed(2);
-  document.getElementById("toggleMode").innerText = playMoneyMode ? 'Switch to Real Money' : 'Switch to Play Money';
-};
-
-// 🎰 Slot Machine
-const slotSymbols = ["🍒", "🍋", "🍊", "⭐", "🔔", "7️⃣"];
-const spinBtn = document.getElementById("spinSlot");
-const slotBetSlider = document.getElementById("slotBet");
-slotBetSlider.oninput = () => document.getElementById("slotBetValue").innerText = slotBetSlider.value;
-
-spinBtn.onclick = () => {
-  const bet = parseFloat(slotBetSlider.value);
-  if (!checkBalance(bet)) return;
-
-  const reels = [randomSymbol(), randomSymbol(), randomSymbol()];
-  document.getElementById("reel1").innerText = reels[0];
-  document.getElementById("reel2").innerText = reels[1];
-  document.getElementById("reel3").innerText = reels[2];
-
-  if (reels[0] === reels[1] && reels[1] === reels[2]) {
-    updateBalance(bet * 5);
-  } else {
-    updateBalance(-bet);
-  }
-};
-
-// 🃏 Blackjack
-const deck = [];
-const suits = ['♠', '♥', '♦', '♣'];
-const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-let playerHand = [], dealerHand = [], blackjackBet = 0;
-
-const blackjackBetSlider = document.getElementById("blackjackBet");
-blackjackBetSlider.oninput = () => document.getElementById("blackjackBetValue").innerText = blackjackBetSlider.value;
-
-function getCardValue(card) {
-  const val = card.slice(0, -1);
-  if (['J', 'Q', 'K'].includes(val)) return 10;
-  if (val === 'A') return 11;
-  return parseInt(val);
+// Update wallet display
+function updateWalletDisplay() {
+  const balanceEl = document.getElementById("walletBalance");
+  balanceEl.textContent = useHouseCoins
+    ? `HC Balance: ${houseCoinsBalance.toFixed(2)}`
+    : `Amina Balance: ${walletBalance.toFixed(2)}`;
 }
 
-function calculateTotal(hand) {
-  let total = hand.reduce((sum, card) => sum + getCardValue(card), 0);
-  let aces = hand.filter(c => c.startsWith('A')).length;
-  while (total > 21 && aces > 0) {
+// ===== SLOT MACHINE =====
+
+const slotSymbols = [
+  "🍒", "🍋", "🍊", "🔔", "⭐", "💎", "7️⃣"
+];
+
+const slotReels = [
+  document.getElementById("slotReel1"),
+  document.getElementById("slotReel2"),
+  document.getElementById("slotReel3"),
+];
+
+let slotSpinning = false;
+
+function spinSlot() {
+  if (slotSpinning) return;
+  const bet = parseFloat(document.getElementById("slotBet").value);
+  if (!checkBet(bet)) return;
+
+  slotSpinning = true;
+  updateWalletBalanceAfterBet(bet);
+  updateWalletDisplay();
+
+  const spinDuration = 3000; // 3 seconds spin
+  const startTime = performance.now();
+
+  function animate() {
+    const now = performance.now();
+    if (now - startTime < spinDuration) {
+      slotReels.forEach(reel => {
+        const symbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+        reel.textContent = symbol;
+      });
+      requestAnimationFrame(animate);
+    } else {
+      // Stop reels with final symbols
+      const finalSymbols = [
+        slotSymbols[Math.floor(Math.random() * slotSymbols.length)],
+        slotSymbols[Math.floor(Math.random() * slotSymbols.length)],
+        slotSymbols[Math.floor(Math.random() * slotSymbols.length)],
+      ];
+      slotReels.forEach((reel, i) => reel.textContent = finalSymbols[i]);
+      slotSpinning = false;
+      const payout = evaluateSlotResult(finalSymbols, bet);
+      handlePayout(payout, bet, "Slot Machine");
+    }
+  }
+
+  animate();
+}
+
+function evaluateSlotResult(symbols, bet) {
+  // Example payouts:
+  if(symbols[0] === symbols[1] && symbols[1] === symbols[2]) {
+    if(symbols[0] === "7️⃣") return bet * 50;
+    if(symbols[0] === "💎") return bet * 20;
+    return bet * 10;
+  }
+  if(symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) {
+    return bet * 2;
+  }
+  return 0;
+}
+
+// ===== BLACKJACK =====
+
+const deckSuits = ["♠", "♥", "♦", "♣"];
+const deckRanks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+let deck = [];
+let playerHand = [];
+let dealerHand = [];
+let blackjackBet = 0;
+let blackjackInProgress = false;
+
+function createDeck() {
+  deck = [];
+  for(let suit of deckSuits) {
+    for(let rank of deckRanks) {
+      deck.push({rank, suit});
+    }
+  }
+  deck = shuffle(deck);
+}
+
+function shuffle(array) {
+  for(let i = array.length -1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function cardValue(card) {
+  if(["J", "Q", "K"].includes(card.rank)) return 10;
+  if(card.rank === "A") return 11;
+  return parseInt(card.rank);
+}
+
+function handValue(hand) {
+  let total = 0;
+  let aces = 0;
+  for(let card of hand) {
+    total += cardValue(card);
+    if(card.rank === "A") aces++;
+  }
+  while(total > 21 && aces > 0) {
     total -= 10;
     aces--;
   }
   return total;
 }
 
-function drawCard() {
-  return deck.pop();
+function startBlackjack() {
+  if(blackjackInProgress) return;
+  const bet = parseFloat(document.getElementById("blackjackBet").value);
+  if(!checkBet(bet)) return;
+
+  blackjackBet = bet;
+  blackjackInProgress = true;
+  updateWalletBalanceAfterBet(bet);
+  updateWalletDisplay();
+
+  createDeck();
+  playerHand = [deck.pop(), deck.pop()];
+  dealerHand = [deck.pop(), deck.pop()];
+
+  renderBlackjackHands(true);
+  updateBlackjackStatus("Your turn! Hit or Stand?");
+  enableBlackjackControls(true);
 }
 
-function dealInitialHands() {
-  deck.length = 0;
-  for (let suit of suits) {
-    for (let val of values) {
-      deck.push(val + suit);
+function renderCard(card) {
+  return `${card.rank}${card.suit}`;
+}
+
+function renderBlackjackHands(hideDealerSecond = false) {
+  const playerDiv = document.getElementById("playerHand");
+  const dealerDiv = document.getElementById("dealerHand");
+
+  playerDiv.textContent = playerHand.map(renderCard).join(" ");
+  if(hideDealerSecond) {
+    dealerDiv.textContent = renderCard(dealerHand[0]) + " ??";
+  } else {
+    dealerDiv.textContent = dealerHand.map(renderCard).join(" ");
+  }
+}
+
+function blackjackHit() {
+  if(!blackjackInProgress) return;
+  playerHand.push(deck.pop());
+  renderBlackjackHands(true);
+
+  if(handValue(playerHand) > 21) {
+    endBlackjack(false);
+  }
+}
+
+function blackjackStand() {
+  if(!blackjackInProgress) return;
+  // Dealer plays
+  while(handValue(dealerHand) < 17) {
+    dealerHand.push(deck.pop());
+  }
+  renderBlackjackHands(false);
+
+  const playerTotal = handValue(playerHand);
+  const dealerTotal = handValue(dealerHand);
+  if(dealerTotal > 21 || playerTotal > dealerTotal) {
+    endBlackjack(true);
+  } else if(playerTotal === dealerTotal) {
+    endBlackjack(null);
+  } else {
+    endBlackjack(false);
+  }
+}
+
+function endBlackjack(playerWon) {
+  let payout = 0;
+  if(playerWon === true) {
+    payout = blackjackBet * 2;
+    updateBlackjackStatus("You won!");
+  } else if(playerWon === null) {
+    payout = blackjackBet;
+    updateBlackjackStatus("Push! It's a tie.");
+  } else {
+    updateBlackjackStatus("You lost.");
+  }
+  if(payout > 0) {
+    if(useHouseCoins){
+      houseCoinsBalance += payout;
+    } else {
+      walletBalance += payout;
     }
   }
-  shuffle(deck);
-  playerHand = [drawCard(), drawCard()];
-  dealerHand = [drawCard(), drawCard()];
-  renderHands();
+  blackjackInProgress = false;
+  enableBlackjackControls(false);
+  updateWalletDisplay();
 }
 
-function renderHands() {
-  document.getElementById("playerCards").innerText = playerHand.join(" ");
-  document.getElementById("dealerCards").innerText = dealerHand.join(" ");
+function updateBlackjackStatus(text) {
+  document.getElementById("blackjackStatus").textContent = text;
 }
 
-document.getElementById("deal").onclick = () => {
-  blackjackBet = parseFloat(blackjackBetSlider.value);
-  if (!checkBalance(blackjackBet)) return;
-  dealInitialHands();
-  updateBalance(-blackjackBet);
-};
-
-document.getElementById("hit").onclick = () => {
-  if (!playerHand.length) return;
-  playerHand.push(drawCard());
-  renderHands();
-  if (calculateTotal(playerHand) > 21) endBlackjack();
-};
-
-document.getElementById("stand").onclick = () => {
-  while (calculateTotal(dealerHand) < 17) {
-    dealerHand.push(drawCard());
-  }
-  renderHands();
-  endBlackjack();
-};
-
-function endBlackjack() {
-  const playerTotal = calculateTotal(playerHand);
-  const dealerTotal = calculateTotal(dealerHand);
-  let result = '';
-
-  if (playerTotal > 21) {
-    result = 'Bust! You lose.';
-  } else if (dealerTotal > 21 || playerTotal > dealerTotal) {
-    result = 'You win!';
-    updateBalance(blackjackBet * 2);
-  } else if (playerTotal === dealerTotal) {
-    result = 'Push. Bet returned.';
-    updateBalance(blackjackBet);
-  } else {
-    result = 'Dealer wins.';
-  }
-
-  alert(result);
-  playerHand = [];
-  dealerHand = [];
-  renderHands();
+function enableBlackjackControls(enable) {
+  document.getElementById("hitBtn").disabled = !enable;
+  document.getElementById("standBtn").disabled = !enable;
+  document.getElementById("startBlackjackBtn").disabled = enable;
 }
 
-// 🔽 Plinko
-document.getElementById("dropPlinko").onclick = () => {
-  const bet = parseFloat(document.getElementById("plinkoBet").value);
-  document.getElementById("plinkoBetValue").innerText = bet;
-  if (!checkBalance(bet)) return;
+// ===== PLINKO =====
 
-  const slots = [0.2, 0.5, 1, 2, 5, 2, 1, 0.5, 0.2];
-  const slot = Math.floor(Math.random() * slots.length);
-  const multiplier = slots[slot];
-  const win = bet * multiplier;
+const plinkoCanvas = document.getElementById("plinkoCanvas");
+const ctx = plinkoCanvas.getContext("2d");
 
-  updateBalance(win - bet);
+const plinkoWidth = plinkoCanvas.width;
+const plinkoHeight = plinkoCanvas.height;
 
-  document.getElementById("plinkoResult").innerText =
-    `Ball landed in slot ${slot + 1} (x${multiplier.toFixed(2)}). You won ${win.toFixed(2)}!`;
-};
+const pegRadius = 5;
+const ballRadius = 8;
+const rows = 10;
+const pegsPerRow = 11;
+const pegSpacingX = plinkoWidth / pegsPerRow;
+const pegSpacingY = 40;
 
-// 🔁 Helpers
-function updateBalance(amount) {
-  if (playMoneyMode) {
-    playBalance += amount;
-    document.getElementById("balance").innerText = playBalance.toFixed(2);
-  } else {
-    balance += amount;
-    document.getElementById("balance").innerText = balance.toFixed(2);
+let pegs = [];
+let ball = null;
+let ballDropping = false;
+let plinkoResultText = document.getElementById("plinkoResult");
+
+// Initialize peg positions
+function initPegs() {
+  pegs = [];
+  for(let row=0; row<rows; row++) {
+    let offsetX = (row % 2) * (pegSpacingX / 2);
+    for(let col=0; col<pegsPerRow; col++) {
+      let x = col * pegSpacingX + offsetX + pegSpacingX/2;
+      let y = row * pegSpacingY + 30;
+      pegs.push({x, y});
+    }
   }
 }
 
-function checkBalance(amount) {
-  const bal = playMoneyMode ? playBalance : balance;
-  if (amount > bal) {
-    alert("Insufficient funds!");
-    return false;
-  }
-  return true;
-}
+// Draw pegs and ball
+function drawPlinko() {
+  ctx.clearRect(0, 0, plinkoWidth, plinkoHeight);
 
-function randomSymbol() {
-  return slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-}
+  // Draw pegs
+  ctx.fillStyle = "#8B80F9"; // cosmic purple
+  pegs.forEach(peg => {
+    ctx.beginPath();
+    ctx.arc(peg.x, peg.y, pegRadius, 0, Math.PI * 2);
+    ctx.fill();
+  });
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)];
-    [array[i], array[j]] = [array[j], array[i]];
+  // Draw slots at bottom
+  ctx.fillStyle = "#FFF";
+  for(let i=0; i<=pegsPerRow; i++) {
+    ctx.fillRect(i * pegSpacingX - 2, plinkoHeight - 30, 4, 30);
   }
-}
+
+ 
