@@ -1,159 +1,180 @@
-// === Global State ===
-let isPlayMode = true;
 let balance = 1000;
-let peraWalletAddress = null;
+let useHouseCoin = false;
+let connectedWallet = null;
 
-// === Utility ===
-function updateBalanceDisplay() {
-  document.getElementById('currency-symbol').textContent = isPlayMode ? 'HC' : 'Amina';
-  document.getElementById('balance-amount').textContent = balance.toFixed(2);
-  document.getElementById('wallet-display').textContent = isPlayMode ? '' : (peraWalletAddress || 'Connect Pera Wallet');
+// --- DOM Elements ---
+const walletBtn = document.getElementById('connectWallet');
+const walletAddressDisplay = document.getElementById('walletAddress');
+const toggleBtn = document.getElementById('toggleMoney');
+const balanceDisplay = document.getElementById('balance');
+const donateBtn = document.getElementById('donateBtn');
+
+// Wallet Integration Placeholder
+walletBtn.onclick = () => {
+  connectedWallet = "6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI"; // Dummy connection
+  walletAddressDisplay.textContent = `Connected: ${connectedWallet}`;
+};
+
+// Toggle between Amina and House Coin
+toggleBtn.onclick = () => {
+  useHouseCoin = !useHouseCoin;
+  balance = useHouseCoin ? 1000 : 0;
+  toggleBtn.textContent = useHouseCoin ? 'Switch to Amina' : 'Switch to House Coin';
+  updateBalance();
+};
+
+function updateBalance() {
+  balanceDisplay.textContent = `Balance: ${balance} ${useHouseCoin ? 'HC' : 'Amina'}`;
 }
 
-// === Toggle Between Modes ===
-document.getElementById('toggle-money').addEventListener('change', () => {
-  isPlayMode = document.getElementById('toggle-money').checked;
-  if (isPlayMode) {
-    balance = 1000;
-  }
-  updateBalanceDisplay();
-});
+// Donation
+donateBtn.onclick = () => {
+  alert(`Donate Amina to wallet: ${connectedWallet}`);
+};
 
-// === Music Controls ===
-const music = document.getElementById('bg-music');
-document.getElementById('btn-music-toggle').addEventListener('click', () => {
-  if (music.paused) {
-    music.play();
-    document.getElementById('btn-music-toggle').textContent = '🔊 Stop Music';
+// Music Controls
+document.getElementById("playMusic").onclick = () => {
+  document.getElementById("popcornMusic").play();
+};
+document.getElementById("stopMusic").onclick = () => {
+  document.getElementById("popcornMusic").pause();
+};
+
+// ------------------- SLOT MACHINE -------------------
+const slotSymbols = ['🍒', '🍋', '🔔', '⭐', '💎'];
+const spinSlotBtn = document.getElementById('spinSlot');
+const slotBetSlider = document.getElementById('slotBet');
+const slotBetDisplay = document.getElementById('slotBetDisplay');
+
+slotBetSlider.oninput = () => {
+  slotBetDisplay.textContent = `Bet: ${slotBetSlider.value}`;
+};
+
+spinSlotBtn.onclick = () => {
+  const bet = parseFloat(slotBetSlider.value);
+  if (bet > balance) return alert("Insufficient funds");
+
+  const reel1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  const reel2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  const reel3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+
+  document.getElementById("reel1").textContent = reel1;
+  document.getElementById("reel2").textContent = reel2;
+  document.getElementById("reel3").textContent = reel3;
+
+  if (reel1 === reel2 && reel2 === reel3) {
+    balance += bet * 5;
+    document.getElementById("slotResult").textContent = "🎉 JACKPOT!";
   } else {
-    music.pause();
-    document.getElementById('btn-music-toggle').textContent = '🎵 Play Music';
+    balance -= bet;
+    document.getElementById("slotResult").textContent = "😢 Try again!";
   }
-});
+  updateBalance();
+};
 
-// === Donate Button ===
-document.getElementById('btn-donate').addEventListener('click', () => {
-  const wallet = '6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI';
-  alert(`Send donations to:\n${wallet}`);
-});
+// ------------------- BLACKJACK -------------------
+let playerHand = [];
+let dealerHand = [];
 
-// === Blackjack ===
-let bjDeck, playerCards, dealerCards;
+const bjBetSlider = document.getElementById('bjBet');
+const bjBetDisplay = document.getElementById('bjBetDisplay');
+bjBetSlider.oninput = () => {
+  bjBetDisplay.textContent = `Bet: ${bjBetSlider.value}`;
+};
 
-function newDeck() {
-  const suits = ['♠', '♥', '♣', '♦'];
-  const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  let deck = [];
-  for (let suit of suits) {
-    for (let value of values) {
-      deck.push({ suit, value });
-    }
+document.getElementById("dealBlackjack").onclick = () => {
+  if (parseFloat(bjBetSlider.value) > balance) return alert("Not enough balance");
+
+  playerHand = [drawCard(), drawCard()];
+  dealerHand = [drawCard(), drawCard()];
+  updateBlackjackDisplay();
+
+  document.getElementById("hit").disabled = false;
+  document.getElementById("stand").disabled = false;
+};
+
+document.getElementById("hit").onclick = () => {
+  playerHand.push(drawCard());
+  updateBlackjackDisplay();
+  if (handValue(playerHand) > 21) finishBlackjackGame();
+};
+
+document.getElementById("stand").onclick = () => {
+  while (handValue(dealerHand) < 17) {
+    dealerHand.push(drawCard());
   }
-  return deck.sort(() => 0.5 - Math.random());
-}
+  finishBlackjackGame();
+};
 
-function cardValue(card) {
-  if (['K', 'Q', 'J'].includes(card.value)) return 10;
-  if (card.value === 'A') return 11;
-  return parseInt(card.value);
+function drawCard() {
+  const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  return values[Math.floor(Math.random() * values.length)];
 }
 
 function handValue(hand) {
-  let val = hand.reduce((sum, c) => sum + cardValue(c), 0);
-  let aces = hand.filter(c => c.value === 'A').length;
-  while (val > 21 && aces--) val -= 10;
-  return val;
+  return hand.reduce((a, b) => a + b, 0);
 }
 
-function displayCards(elem, cards) {
-  elem.innerHTML = cards.map(c => `<span class="card">${c.value}${c.suit}</span>`).join('');
+function updateBlackjackDisplay() {
+  document.getElementById("playerHand").innerHTML = `<strong>You:</strong> ${playerHand.join(", ")}`;
+  document.getElementById("dealerHand").innerHTML = `<strong>Dealer:</strong> ${dealerHand.join(", ")}`;
 }
 
-function updateBJButtons(inGame) {
-  document.getElementById('btn-bj-hit').disabled = !inGame;
-  document.getElementById('btn-bj-stand').disabled = !inGame;
-}
+function finishBlackjackGame() {
+  const playerTotal = handValue(playerHand);
+  const dealerTotal = handValue(dealerHand);
+  const bet = parseFloat(bjBetSlider.value);
 
-document.getElementById('btn-bj-new').addEventListener('click', () => {
-  const bet = parseFloat(document.getElementById('bj-bet').value);
-  if (bet > balance || bet <= 0) return alert("Invalid bet.");
-  balance -= bet;
-  updateBalanceDisplay();
-  document.getElementById('bj-result').textContent = '';
-
-  bjDeck = newDeck();
-  playerCards = [bjDeck.pop(), bjDeck.pop()];
-  dealerCards = [bjDeck.pop(), bjDeck.pop()];
-
-  displayCards(document.getElementById('player-cards'), playerCards);
-  displayCards(document.getElementById('dealer-cards'), [dealerCards[0], { value: '?', suit: '' }]);
-  updateBJButtons(true);
-});
-
-document.getElementById('btn-bj-hit').addEventListener('click', () => {
-  playerCards.push(bjDeck.pop());
-  displayCards(document.getElementById('player-cards'), playerCards);
-  if (handValue(playerCards) > 21) {
-    document.getElementById('bj-result').textContent = 'Bust! Dealer wins.';
-    updateBJButtons(false);
-  }
-});
-
-document.getElementById('btn-bj-stand').addEventListener('click', () => {
-  const bet = parseFloat(document.getElementById('bj-bet').value);
-  updateBJButtons(false);
-  displayCards(document.getElementById('dealer-cards'), dealerCards);
-  while (handValue(dealerCards) < 17) dealerCards.push(bjDeck.pop());
-  const playerVal = handValue(playerCards);
-  const dealerVal = handValue(dealerCards);
-  let result = '';
-  if (dealerVal > 21 || playerVal > dealerVal) {
-    result = 'You win!';
-    balance += bet * 2;
-  } else if (playerVal === dealerVal) {
-    result = 'Push.';
+  let result = "";
+  if (playerTotal > 21) {
+    result = "You bust!";
+    balance -= bet;
+  } else if (dealerTotal > 21 || playerTotal > dealerTotal) {
+    result = "You win!";
     balance += bet;
+  } else if (playerTotal < dealerTotal) {
+    result = "Dealer wins!";
+    balance -= bet;
   } else {
-    result = 'Dealer wins.';
+    result = "Push.";
   }
-  document.getElementById('bj-result').textContent = result;
-  updateBalanceDisplay();
-});
 
-// === Slot Machine ===
-const symbols = ['🍒', '🍋', '🔔', '⭐', '💎'];
+  document.getElementById("bjResult").textContent = result;
+  document.getElementById("hit").disabled = true;
+  document.getElementById("stand").disabled = true;
+  updateBalance();
+}
 
-document.getElementById('btn-slot-spin').addEventListener('click', () => {
-  const bet = parseFloat(document.getElementById('slot-bet').value);
-  if (bet > balance || bet <= 0) return alert("Invalid bet.");
-  balance -= bet;
-  const slot1 = symbols[Math.floor(Math.random() * symbols.length)];
-  const slot2 = symbols[Math.floor(Math.random() * symbols.length)];
-  const slot3 = symbols[Math.floor(Math.random() * symbols.length)];
-  document.getElementById('slot1').textContent = slot1;
-  document.getElementById('slot2').textContent = slot2;
-  document.getElementById('slot3').textContent = slot3;
-  let winnings = 0;
-  if (slot1 === slot2 && slot2 === slot3) winnings = bet * 5;
-  else if (slot1 === slot2 || slot2 === slot3 || slot1 === slot3) winnings = bet * 2;
-  balance += winnings;
-  updateBalanceDisplay();
-  document.getElementById('slot-result').textContent = winnings > 0 ? `You won ${winnings.toFixed(2)}!` : 'Try again!';
-});
+// ------------------- PLINKO -------------------
+const plinkoCanvas = document.getElementById("plinkoBoard");
+const ctx = plinkoCanvas.getContext("2d");
+const plinkoBetSlider = document.getElementById("plinkoBet");
+const plinkoBetDisplay = document.getElementById("plinkoBetDisplay");
+plinkoBetSlider.oninput = () => {
+  plinkoBetDisplay.textContent = `Bet: ${plinkoBetSlider.value}`;
+};
 
-// === Plinko ===
-document.getElementById('btn-plinko-drop').addEventListener('click', () => {
-  const bet = parseFloat(document.getElementById('plinko-bet').value);
-  if (bet > balance || bet <= 0) return alert("Invalid bet.");
-  balance -= bet;
-  updateBalanceDisplay();
-  const outcome = Math.random();
-  let multiplier = 0;
-  if (outcome < 0.1) multiplier = 10;
-  else if (outcome < 0.3) multiplier = 3;
-  else if (outcome < 0.6) multiplier = 1;
-  const winnings = bet * multiplier;
-  balance += winnings;
-  updateBalanceDisplay();
-  document.getElementById('plinko-result').textContent = `You won ${winnings.toFixed(2)} (${multiplier}x)`;
-});
+document.getElementById("dropPlinko").onclick = () => {
+  if (parseFloat(plinkoBetSlider.value) > balance) return alert("Not enough balance");
+
+  let x = 150;
+  let y = 0;
+  let interval = setInterval(() => {
+    ctx.clearRect(0, 0, plinkoCanvas.width, plinkoCanvas.height);
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.fillStyle = "gold";
+    ctx.fill();
+    y += 5;
+    if (y >= 380) {
+      clearInterval(interval);
+      const multiplier = [0.5, 1, 2, 5][Math.floor(Math.random() * 4)];
+      const win = parseFloat(plinkoBetSlider.value) * multiplier;
+      balance += win - parseFloat(plinkoBetSlider.value);
+      document.getElementById("plinkoResult").textContent = `You won ${win.toFixed(2)} (${multiplier}x)!`;
+      updateBalance();
+    }
+  }, 30);
+};
+
+updateBalance();
