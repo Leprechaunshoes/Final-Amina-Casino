@@ -1,64 +1,87 @@
-// Global state
-let currentMode = "amina";
-let wallet = null;
+let useHC = false;
 
-document.querySelectorAll('input[name="currency"]').forEach((radio) => {
-  radio.addEventListener("change", (e) => {
-    currentMode = e.target.value;
-    console.log("Currency switched to:", currentMode);
-  });
-});
+function toggleCurrency() {
+  useHC = document.getElementById('hcToggle').checked;
+  alert("Currency: " + (useHC ? "House Coin (HC)" : "Amina Coin"));
+}
 
-document.getElementById("connectWallet").onclick = async () => {
-  try {
-    const accounts = await window.algorand?.connect(); // Pera Wallet API expected
-    wallet = accounts[0];
-    document.getElementById("walletAddress").innerText = `Connected: ${wallet}`;
-  } catch {
-    alert("Failed to connect Pera Wallet.");
-  }
-};
-
-function takeBet() {
-  const rake = 0.05;
-  const bet = currentMode === "amina" ? 0.25 : 1;
-  const houseCut = bet * rake;
-  console.log(`Bet: ${bet} ${currentMode} (House takes ${houseCut})`);
-  return bet - houseCut;
+function connectWallet() {
+  document.getElementById('walletStatus').innerText = "Pera Wallet connected (simulated)";
 }
 
 function playSlot() {
-  const payout = takeBet();
-  const result = Math.random();
-  let message = "🎰 You lost!";
-  if (result > 0.8) message = `🎉 Big Win! You won ${payout * 3}`;
-  else if (result > 0.5) message = `⭐ You won ${payout}`;
-  document.getElementById("slotResult").innerText = message;
+  const symbols = ['🍒', '🔔', '💎', '7️⃣'];
+  const reels = [
+    symbols[Math.floor(Math.random() * symbols.length)],
+    symbols[Math.floor(Math.random() * symbols.length)],
+    symbols[Math.floor(Math.random() * symbols.length)]
+  ];
+  document.getElementById('slotReels').innerText = `[ ${reels[0]} ] [ ${reels[1]} ] [ ${reels[2]} ]`;
+  const win = reels[0] === reels[1] && reels[1] === reels[2];
+  document.getElementById('slotResult').innerText = win ? "🎉 You win!" : "Try again!";
 }
 
-function playBlackjack() {
-  const payout = takeBet();
-  const player = Math.floor(Math.random() * 21) + 1;
-  const dealer = Math.floor(Math.random() * 21) + 1;
-  let message = `You: ${player} vs Dealer: ${dealer} — `;
-  if (player > dealer) message += `🎉 Win ${payout}`;
-  else if (player === dealer) message += "🤝 Push!";
-  else message += "💀 Lose!";
-  document.getElementById("blackjackResult").innerText = message;
+// Blackjack
+let player = [];
+let dealer = [];
+
+function drawCard() {
+  return Math.floor(Math.random() * 10) + 1;
 }
 
-function playPlinko() {
-  const payout = takeBet();
-  const result = Math.random();
-  let message = "🪙 You dropped the chip...";
-  if (result > 0.9) message += ` Jackpot! 🎯 Won ${payout * 5}`;
-  else if (result > 0.6) message += ` Nice! Won ${payout * 2}`;
-  else message += " Missed! Try again.";
-  document.getElementById("plinkoResult").innerText = message;
+function resetBlackjack() {
+  player = [drawCard(), drawCard()];
+  dealer = [drawCard()];
+  updateBlackjackUI();
 }
 
-function toggleMusic() {
-  const music = document.getElementById("bgMusic");
-  if (music.paused) music.play();
-  else music.pause();
+function updateBlackjackUI() {
+  document.getElementById('playerHand').innerText = player.join(', ') + " = " + getTotal(player);
+  document.getElementById('dealerHand').innerText = dealer.join(', ') + " = " + getTotal(dealer);
+}
+
+function getTotal(hand) {
+  return hand.reduce((a, b) => a + b, 0);
+}
+
+function hit() {
+  player.push(drawCard());
+  updateBlackjackUI();
+  if (getTotal(player) > 21) {
+    document.getElementById('blackjackResult').innerText = "💥 Bust! Dealer wins.";
+  }
+}
+
+function stand() {
+  while (getTotal(dealer) < 17) {
+    dealer.push(drawCard());
+  }
+  updateBlackjackUI();
+  const playerTotal = getTotal(player);
+  const dealerTotal = getTotal(dealer);
+
+  let result = "";
+  if (dealerTotal > 21 || playerTotal > dealerTotal) {
+    result = "🎉 You win!";
+  } else if (dealerTotal === playerTotal) {
+    result = "🤝 It's a tie.";
+  } else {
+    result = "❌ Dealer wins.";
+  }
+  document.getElementById('blackjackResult').innerText = result;
+}
+
+resetBlackjack();
+
+// Plinko
+function dropPlinko() {
+  const outcomes = ["0.1 Amina", "0.25 Amina", "0.5 Amina", "1 Amina", "0"];
+  const result = outcomes[Math.floor(Math.random() * outcomes.length)];
+  document.getElementById('plinkoResult').innerText = "🎯 You won: " + result;
+}
+
+// Donate
+function donate() {
+  const address = "6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI";
+  prompt("Send Amina donations to this wallet:", address);
 }
