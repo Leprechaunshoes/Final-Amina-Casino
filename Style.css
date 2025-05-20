@@ -1,44 +1,114 @@
+/* Cosmic Background */
 body {
-  background: radial-gradient(circle at top, #000015, #0a0a2a);
-  color: #ffffff;
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
   margin: 0;
-  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(ellipse at top, #1a0033 0%, #000000 100%);
+  color: #f0f8ff;
+  text-align: center;
 }
 
-.header {
-  background: linear-gradient(to right, #003366, #001122);
-  padding: 20px;
+/* Header */
+header {
+  padding: 1rem;
+  background: linear-gradient(90deg, #390099, #9e0059, #ff0054);
+  color: white;
+  font-size: 2rem;
+  text-shadow: 1px 1px 5px black;
 }
 
-.game {
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #111122;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 20px #00ffff55;
-}
-
-button {
-  background-color: #00ffff;
-  color: #000;
-  border: none;
+/* Navigation Buttons */
+nav button {
+  margin: 0.5rem;
   padding: 10px 20px;
-  margin: 10px;
+  background-color: #4c00ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #4c00ff;
+  transition: 0.3s;
   cursor: pointer;
-  border-radius: 5px;
 }
 
-button:hover {
-  background-color: #00dddd;
+nav button:hover {
+  background-color: #7200ff;
 }
 
-footer {
-  margin-top: 50px;
+/* Game Containers */
+.game {
+  margin-top: 2rem;
+  display: none;
+}
+
+.game.active {
+  display: block;
+}
+
+/* Cards */
+.card {
+  display: inline-block;
+  margin: 0.5rem;
   padding: 20px;
-  background-color: #000022;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  box-shadow: 0 0 10px #00ffe1;
+  width: 60px;
+  height: 90px;
+}
+
+/* Slot Machine Reels */
+#slot-reels {
+  font-size: 3rem;
+  margin: 1rem;
+  color: gold;
+  text-shadow: 2px 2px 5px red;
+}
+
+/* Result Text */
+#blackjack-result,
+#slot-result,
+#plinko-result {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ffcc;
+}
+
+/* Wallet Status */
+#walletStatus {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Buttons inside games */
+.game button {
+  padding: 10px 20px;
+  margin: 0.5rem;
+  background-color: #ff0080;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.game button:hover {
+  background-color: #ff33a8;
+}
+
+/* Hidden Class */
+.hidden {
+  display: none;
+}
+
+/* Cosmic Footer */
+footer {
+  margin-top: 3rem;
+  padding: 1rem;
+  background: #111;
   color: #888;
+  font-size: 0.9rem;
 }
