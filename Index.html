@@ -1,95 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino – Cosmic Crypto Casino</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amina Casino - Cosmic Casino Experience</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>🌌 Amina Casino</h1>
-    <div class="toggle-section">
-      <label>
-        <input type="checkbox" id="moneyToggle" />
-        Use House Coins (HC)
-      </label>
-      <span id="walletDisplay">Wallet: 0 Amina</span>
-    </div>
+    <h1>Amina Casino 🌌</h1>
+    <div id="wallet-status">Wallet: <span id="wallet-address">Not connected</span></div>
+    <button id="connect-wallet-btn">Connect Pera Wallet</button>
+    <label class="toggle-switch">
+      <input type="checkbox" id="mode-toggle" />
+      <span class="slider"></span>
+      <span class="toggle-label">Play Money Mode</span>
+    </label>
   </header>
 
   <main>
-    <div class="game-grid">
-      <div class="game-card" onclick="openModal('slotModal')">
-        <h2>🎰 Slot Machine</h2>
-        <p>Spin for cosmic riches</p>
+    <section id="slot-machine" class="game-container">
+      <h2>Slot Machine 🎰</h2>
+      <div class="slot-reels">
+        <div class="reel" id="reel1">🍒</div>
+        <div class="reel" id="reel2">🍋</div>
+        <div class="reel" id="reel3">🍉</div>
       </div>
-      <div class="game-card" onclick="openModal('blackjackModal')">
-        <h2>🃏 Blackjack</h2>
-        <p>Beat the cosmic dealer</p>
+      <button id="spin-btn">Spin</button>
+      <label for="slot-bet">Bet: <span id="slot-bet-amount">0.25</span> Amina</label>
+      <input type="range" id="slot-bet" min="0.01" max="1" step="0.01" value="0.25" />
+      <div class="result" id="slot-result"></div>
+    </section>
+
+    <section id="blackjack" class="game-container">
+      <h2>Blackjack 🃏</h2>
+      <div id="blackjack-table">
+        <div id="dealer-hand" class="hand">
+          <h3>Dealer</h3>
+          <div class="cards" id="dealer-cards"></div>
+          <div class="score" id="dealer-score"></div>
+        </div>
+        <div id="player-hand" class="hand">
+          <h3>Player</h3>
+          <div class="cards" id="player-cards"></div>
+          <div class="score" id="player-score"></div>
+        </div>
       </div>
-      <div class="game-card" onclick="openModal('plinkoModal')">
-        <h2>🔵 Plinko</h2>
-        <p>Drop into the galaxy</p>
+      <label for="bj-bet">Bet: <span id="bj-bet-amount">0.25</span> Amina</label>
+      <input type="range" id="bj-bet" min="0.01" max="1" step="0.01" value="0.25" />
+      <div id="bj-controls">
+        <button id="bj-deal-btn">Deal</button>
+        <button id="bj-hit-btn" disabled>Hit</button>
+        <button id="bj-stand-btn" disabled>Stand</button>
       </div>
-    </div>
+      <div class="result" id="bj-result"></div>
+    </section>
+
+    <section id="plinko" class="game-container">
+      <h2>Plinko 🎯</h2>
+      <canvas id="plinko-canvas" width="400" height="400"></canvas>
+      <label for="plinko-bet">Bet: <span id="plinko-bet-amount">0.25</span> Amina</label>
+      <input type="range" id="plinko-bet" min="0.01" max="1" step="0.01" value="0.25" />
+      <button id="plinko-drop-btn">Drop Ball</button>
+      <div class="result" id="plinko-result"></div>
+    </section>
   </main>
 
   <footer>
-    <button id="donateButton">💖 Donate to Casino</button>
-    <audio id="popcornMusic" loop>
-      <source src="https://archive.org/download/PopcornSong/Popcorn.mp3" type="audio/mpeg">
-      Your browser does not support the audio tag.
+    <button id="donate-btn">Donate to House</button>
+    <audio id="popcorn-audio" loop>
+      <source src="popcorn.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
     </audio>
-    <button onclick="toggleMusic()">🎵 Toggle Music</button>
+    <button id="audio-toggle-btn">Play / Pause Music</button>
   </footer>
-
-  <!-- 🎰 Slot Machine Modal -->
-  <div id="slotModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('slotModal')">&times;</span>
-      <h2>Slot Machine</h2>
-      <div id="slotReels" class="reels">
-        <div class="reel" id="reel1">☀️</div>
-        <div class="reel" id="reel2">🌙</div>
-        <div class="reel" id="reel3">🌟</div>
-      </div>
-      <input type="range" id="slotBet" min="0.1" max="1" step="0.1" value="0.25">
-      <button onclick="spinSlot()">Spin</button>
-      <p id="slotResult"></p>
-    </div>
-  </div>
-
-  <!-- 🃏 Blackjack Modal -->
-  <div id="blackjackModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('blackjackModal')">&times;</span>
-      <h2>Blackjack</h2>
-      <div id="blackjackTable" class="blackjack-table">
-        <div id="dealerHand" class="hand">Dealer: </div>
-        <div id="playerHand" class="hand">You: </div>
-      </div>
-      <input type="range" id="blackjackBet" min="0.1" max="1" step="0.1" value="0.25">
-      <div class="bj-controls">
-        <button onclick="startBlackjack()">Deal</button>
-        <button onclick="hit()">Hit</button>
-        <button onclick="stand()">Stand</button>
-      </div>
-      <p id="blackjackResult"></p>
-    </div>
-  </div>
-
-  <!-- 🔵 Plinko Modal -->
-  <div id="plinkoModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('plinkoModal')">&times;</span>
-      <h2>Plinko</h2>
-      <canvas id="plinkoCanvas" width="300" height="400"></canvas>
-      <input type="range" id="plinkoBet" min="0.1" max="1" step="0.1" value="0.25">
-      <button onclick="dropPlinkoBall()">Drop Ball</button>
-      <p id="plinkoResult"></p>
-    </div>
-  </div>
 
   <script src="scripts.js"></script>
 </body>
