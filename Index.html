@@ -2,66 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino v7</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amina Casino vFinal 🚀</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>🚀 Amina Casino 🎰</h1>
-    <p class="subtitle">Cosmic luck awaits, Captain!</p>
-    <div id="walletStatus">Not Connected</div>
-    <button onclick="connectWallet()">Connect Pera Wallet</button>
+    <h1>Amina Casino 🎰🃏🔮</h1>
+    <div id="wallet-status">Wallet: <span id="wallet-address">Not connected</span></div>
+    <button id="connect-wallet">Connect Pera Wallet</button>
   </header>
 
-  <nav>
-    <button onclick="showGame('blackjack')">♠️ Blackjack</button>
-    <button onclick="showGame('slots')">🎰 Slot Machine</button>
-    <button onclick="showGame('plinko')">🟡 Plinko</button>
-  </nav>
-
   <main>
-    <section id="blackjack" class="game">
+    <section id="blackjack" class="game-container">
       <h2>Blackjack Table</h2>
-      <div class="blackjack-table">
-        <div>
-          <h3>Dealer</h3>
-          <div id="dealer-cards" class="cards"></div>
+      <div id="blackjack-table">
+        <div class="hand dealer-hand">
+          <h3>Dealer's Hand</h3>
+          <div class="cards" id="dealer-cards"></div>
+          <div class="score" id="dealer-score"></div>
         </div>
-        <div>
-          <h3>You</h3>
-          <div id="player-cards" class="cards"></div>
+        <div class="hand player-hand">
+          <h3>Your Hand</h3>
+          <div class="cards" id="player-cards"></div>
+          <div class="score" id="player-score"></div>
         </div>
-        <div class="controls">
-          <button onclick="startBlackjack()">Deal</button>
-          <button onclick="hit()">Hit</button>
-          <button onclick="stand()">Stand</button>
-        </div>
-        <p id="blackjack-result"></p>
       </div>
+      <div class="controls">
+        <button id="bj-hit">Hit</button>
+        <button id="bj-stand">Stand</button>
+        <button id="bj-deal">Deal</button>
+      </div>
+      <div id="bj-result" class="result"></div>
     </section>
 
-    <section id="slots" class="game hidden">
-      <h2>Slot Machine</h2>
-      <div class="slot-machine">
-        <div id="slot-reels">🍒 🍋 🔔</div>
-        <button onclick="spinSlot()">Spin</button>
-        <p id="slot-result"></p>
+    <section id="slot-machine" class="game-container">
+      <h2>Cosmic Slot Machine</h2>
+      <div id="slot-reels">
+        <div class="reel" id="reel1">🍒</div>
+        <div class="reel" id="reel2">🍋</div>
+        <div class="reel" id="reel3">⭐</div>
       </div>
+      <button id="spin-slot">Spin</button>
+      <div id="slot-result" class="result"></div>
     </section>
 
-    <section id="plinko" class="game hidden">
-      <h2>Plinko</h2>
-      <div class="plinko-board">
-        <button onclick="dropPlinko()">Drop Chip</button>
-        <p id="plinko-result"></p>
-      </div>
+    <section id="plinko" class="game-container">
+      <h2>Plinko Drop</h2>
+      <canvas id="plinko-canvas" width="320" height="400"></canvas>
+      <button id="drop-plinko">Drop Ball</button>
+      <div id="plinko-result" class="result"></div>
     </section>
   </main>
 
   <footer>
-    <p>© 2025 Amina Casino • Built with 🚀 & 🔥</p>
-    <p>Donations: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
+    <p>Powered by Amina Coin &nbsp;|&nbsp; Cosmic Luck &nbsp;|&nbsp; Capt’s Ship 🚀</p>
   </footer>
 
   <script src="scripts.js"></script>
