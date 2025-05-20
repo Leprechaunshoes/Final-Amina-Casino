@@ -7,56 +7,71 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="header">
-    <img src="https://i.imgur.com/1Uz1c8G.png" alt="Amina Coin" class="logo" />
-    <h1>🎰 Amina Casino 🌌</h1>
-    <p id="walletStatus">Connect Wallet</p>
-    <button onclick="connectWallet()">🔌 Connect Pera Wallet</button>
-    <button onclick="togglePlayMode()">💰 Toggle Play Money</button>
-    <p id="balance">Balance: 0</p>
-  </div>
+  <header>
+    <h1>🌌 Amina Casino 🎰</h1>
+    <div class="wallet-section">
+      <button id="connectWallet">🔗 Connect Pera Wallet</button>
+      <span id="walletAddress">Not connected</span>
+    </div>
+    <div class="toggle-section">
+      <button id="toggleMoney">Switch to House Coin</button>
+      <span id="balance">Balance: 0 Amina</span>
+    </div>
+    <div class="donate">
+      <button id="donateBtn">💸 Donate</button>
+    </div>
+    <div class="music-player">
+      <button id="playMusic">▶️ Popcorn</button>
+      <button id="stopMusic">⏹️ Stop</button>
+      <audio id="popcornMusic" loop>
+        <source src="https://upload.wikimedia.org/wikipedia/commons/0/01/Popcorn_1972.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </header>
 
-  <div class="game-container">
-    <!-- Blackjack -->
-    <section class="game">
-      <h2>♠ Blackjack</h2>
+  <main>
+    <section class="game" id="slotMachine">
+      <h2>🎰 Cosmic Slot Machine</h2>
+      <div class="slot-reels">
+        <div class="reel" id="reel1">🍒</div>
+        <div class="reel" id="reel2">🍋</div>
+        <div class="reel" id="reel3">🔔</div>
+      </div>
+      <input type="range" id="slotBet" min="0.01" max="1" step="0.01" value="0.25" />
+      <span id="slotBetDisplay">Bet: 0.25</span>
+      <button id="spinSlot">Spin</button>
+      <div id="slotResult"></div>
+    </section>
+
+    <section class="game" id="blackjack">
+      <h2>🃏 Cosmic Blackjack</h2>
       <div class="blackjack-table">
-        <div id="dealer-hand" class="card-hand"></div>
-        <div id="player-hand" class="card-hand"></div>
+        <div id="dealerHand"><strong>Dealer:</strong></div>
+        <div id="playerHand"><strong>You:</strong></div>
       </div>
-      <div class="controls">
-        <button onclick="placeBet('blackjack')">Bet 0.25</button>
-        <button onclick="hit()">Hit</button>
-        <button onclick="stand()">Stand</button>
-        <p id="blackjack-result"></p>
+      <input type="range" id="bjBet" min="0.01" max="1" step="0.01" value="0.25" />
+      <span id="bjBetDisplay">Bet: 0.25</span>
+      <div class="bj-buttons">
+        <button id="dealBlackjack">Deal</button>
+        <button id="hit" disabled>Hit</button>
+        <button id="stand" disabled>Stand</button>
       </div>
+      <div id="bjResult"></div>
     </section>
 
-    <!-- Slot Machine -->
-    <section class="game">
-      <h2>🎰 Slot Machine</h2>
-      <div id="slot-display" class="slot-display">🍒 🍋 🍇</div>
-      <button onclick="playSlot()">Spin 0.25</button>
-      <p id="slot-result"></p>
+    <section class="game" id="plinko">
+      <h2>✨ Plinko (Amina Edition)</h2>
+      <canvas id="plinkoBoard" width="300" height="400"></canvas>
+      <input type="range" id="plinkoBet" min="0.01" max="1" step="0.01" value="0.25" />
+      <span id="plinkoBetDisplay">Bet: 0.25</span>
+      <button id="dropPlinko">Drop Chip</button>
+      <div id="plinkoResult"></div>
     </section>
+  </main>
 
-    <!-- Plinko -->
-    <section class="game">
-      <h2>🟣 Plinko</h2>
-      <div class="plinko-board" id="plinko-board"></div>
-      <button onclick="playPlinko()">Drop Ball (0.25)</button>
-      <p id="plinko-result"></p>
-    </section>
-  </div>
-
-  <div class="footer">
-    <audio id="popcornAudio" loop>
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-    <button onclick="toggleMusic()">🎵 Toggle Popcorn Song</button>
-    <button onclick="donate()">🙏 Donate</button>
-  </div>
+  <footer>
+    <p>© 2025 Amina Casino. Built for the stars.</p>
+  </footer>
 
   <script src="scripts.js"></script>
 </body>
