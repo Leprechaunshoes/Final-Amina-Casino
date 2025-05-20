@@ -1,94 +1,68 @@
-// --- Casino House and Circulation Logic ---
-let houseBalance = 475.0; // House starts with 475 Amina
-const totalCoins = 1000.0;
-let playerRealBalance = 10.0; // Real Amina balance
-let playerPlayBalance = 1000.0; // Play money balance
-let usePlayMoney = true; // Start in play money mode
+// scripts.js
 
-// --- Utility Functions ---
-function updateBalances() {
-    const resultDiv = document.getElementById('result');
-    let balanceHtml = `
-        <div style="margin-bottom:12px;">
-            <strong>House Balance:</strong> ${houseBalance.toFixed(2)} Amina<br>
-            <strong>Your Balance:</strong> ${(usePlayMoney ? playerPlayBalance : playerRealBalance).toFixed(2)} ${usePlayMoney ? 'Play Money' : 'Amina'}<br>
-            <strong>Total Coins in Circulation:</strong> ${totalCoins.toFixed(2)} Amina
-        </div>
-    `;
-    resultDiv.innerHTML = balanceHtml;
-}
+let walletConnected = false;
+let balance = 0;
+let isPlayMode = true;
+let houseCoins = 1000;
 
-// --- Toggle Between Real and Play Money ---
-function toggleMoney() {
-    usePlayMoney = !usePlayMoney;
-    alert(`Switched to ${usePlayMoney ? 'Play Money' : 'Real Amina'} mode.`);
-    updateBalances();
-}
+// Load Popcorn song
+const popcorn = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+popcorn.loop = true;
 
-// --- Fractal Betting Prompt ---
-function getBetAmount() {
-    let balance = usePlayMoney ? playerPlayBalance : playerRealBalance;
-    let bet = prompt(`How much would you like to bet? (You have ${balance.toFixed(2)} ${usePlayMoney ? 'Play Money' : 'Amina'})`);
-    if (bet === null) return null;
-    bet = parseFloat(bet);
-    if (isNaN(bet) || bet <= 0) {
-        alert("Please enter a valid positive number.");
-        return null;
-    }
-    if (bet > balance) {
-        alert("You don't have enough to make that bet.");
-        return null;
-    }
-    return bet;
-}
+document.getElementById("togglePlayMode").addEventListener("click", () => {
+    isPlayMode = !isPlayMode;
+    document.getElementById("modeStatus").innerText = isPlayMode ? "PLAY MODE (HC)" : "REAL MODE (Amina)";
+});
 
-// --- Game Functions (Slot, Blackjack, Plinko) ---
-function playGame(odds, multiplier, gameName) {
-    updateBalances();
-    let bet = getBetAmount();
-    if (bet === null) return;
+document.getElementById("connectWallet").addEventListener("click", () => {
+    // Mock wallet connection (replace with Pera integration)
+    walletConnected = true;
+    balance = 10; // Replace with actual balance from Pera
+    document.getElementById("walletStatus").innerText = "Wallet Connected: 10 Amina";
+});
 
-    let win = Math.random() < odds;
-    let payout = win ? bet * multiplier : 0;
-
-    if (win && payout > houseBalance) {
-        alert("The house can't cover this payout. Try a smaller bet.");
-        return;
-    }
-
-    let balance = usePlayMoney ? playerPlayBalance : playerRealBalance;
-    let message = "";
-    if (win) {
-        balance += payout;
-        houseBalance -= payout;
-        message = `🎉 ${gameName} WIN! You WON ${payout.toFixed(2)}!`;
+document.getElementById("popcornToggle").addEventListener("click", () => {
+    if (popcorn.paused) {
+        popcorn.play();
+        document.getElementById("popcornToggle").innerText = "Stop Popcorn";
     } else {
-        balance -= bet;
-        houseBalance += bet;
-        message = `😢 ${gameName} lost. You lost ${bet.toFixed(2)}.`;
+        popcorn.pause();
+        document.getElementById("popcornToggle").innerText = "Play Popcorn";
     }
+});
 
-    if (usePlayMoney) {
-        playerPlayBalance = balance;
+// Slot Machine Logic
+document.getElementById("slotSpin").addEventListener("click", () => {
+    const reels = ["🍒", "🍋", "🔔", "⭐", "💎"];
+    const slot1 = reels[Math.floor(Math.random() * reels.length)];
+    const slot2 = reels[Math.floor(Math.random() * reels.length)];
+    const slot3 = reels[Math.floor(Math.random() * reels.length)];
+
+    document.getElementById("slotResult").innerText = `${slot1} ${slot2} ${slot3}`;
+
+    if (slot1 === slot2 && slot2 === slot3) {
+        alert("🎉 You win!");
     } else {
-        playerRealBalance = balance;
+        alert("Try again!");
     }
+});
 
-    updateBalances();
-    document.getElementById('result').innerHTML += `<div style="margin-top:14px;">${message}</div>`;
-}
+// Blackjack Logic (Basic Example)
+document.getElementById("dealCards").addEventListener("click", () => {
+    const cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const playerCard1 = cards[Math.floor(Math.random() * cards.length)];
+    const playerCard2 = cards[Math.floor(Math.random() * cards.length)];
+    document.getElementById("blackjackCards").innerText = `Player: ${playerCard1}, ${playerCard2}`;
+});
 
-function playSlot() {
-    playGame(0.2, 4, "Slot");
-}
+// Plinko Logic
+document.getElementById("dropPlinko").addEventListener("click", () => {
+    const outcomes = [0.2, 0.5, 1, 2, 5, 10];
+    const chosen = outcomes[Math.floor(Math.random() * outcomes.length)];
+    document.getElementById("plinkoResult").innerText = `🏆 Multiplier: x${chosen}`;
+});
 
-function playBlackjack() {
-    playGame(0.45, 2, "Blackjack");
-}
-
-function playPlinko() {
-    playGame(0.1, 10, "Plinko");
-}
-
-// --- On Load ---
-window.onload = updateBalances;
+// Donate Button
+document.getElementById("donate").addEventListener("click", () => {
+    window.open("https://app.perawallet.com/transfer?asset=1107424865&amount=1&to=6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI", "_blank");
+});
