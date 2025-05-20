@@ -3,61 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amina Casino vFinal 🚀</title>
+  <title>Amina Casino - Cosmic Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Amina Casino 🎰🃏🔮</h1>
-    <div id="wallet-status">Wallet: <span id="wallet-address">Not connected</span></div>
-    <button id="connect-wallet">Connect Pera Wallet</button>
-  </header>
+  <div id="casino-container">
+    <h1>🌌 Amina Casino - Cosmic Edition 🌌</h1>
 
-  <main>
-    <section id="blackjack" class="game-container">
-      <h2>Blackjack Table</h2>
-      <div id="blackjack-table">
-        <div class="hand dealer-hand">
-          <h3>Dealer's Hand</h3>
-          <div class="cards" id="dealer-cards"></div>
-          <div class="score" id="dealer-score"></div>
-        </div>
-        <div class="hand player-hand">
-          <h3>Your Hand</h3>
-          <div class="cards" id="player-cards"></div>
-          <div class="score" id="player-score"></div>
-        </div>
-      </div>
-      <div class="controls">
-        <button id="bj-hit">Hit</button>
-        <button id="bj-stand">Stand</button>
-        <button id="bj-deal">Deal</button>
-      </div>
-      <div id="bj-result" class="result"></div>
+    <!-- Wallet Section -->
+    <section id="wallet-section">
+      <button id="connect-wallet-btn">Connect Pera Wallet</button>
+      <div id="wallet-address">Wallet not connected</div>
     </section>
 
-    <section id="slot-machine" class="game-container">
-      <h2>Cosmic Slot Machine</h2>
-      <div id="slot-reels">
-        <div class="reel" id="reel1">🍒</div>
-        <div class="reel" id="reel2">🍋</div>
-        <div class="reel" id="reel3">⭐</div>
+    <!-- Blackjack Section -->
+    <section id="blackjack-section">
+      <h2>Blackjack</h2>
+      <div id="blackjack-cards">
+        <div id="player-cards" class="card-area"></div>
+        <div id="dealer-cards" class="card-area"></div>
       </div>
-      <button id="spin-slot">Spin</button>
-      <div id="slot-result" class="result"></div>
+      <div>
+        <button id="btn-hit">Hit</button>
+        <button id="btn-stand">Stand</button>
+        <button id="btn-new-game">New Game</button>
+      </div>
+      <div id="bj-result"></div>
     </section>
 
-    <section id="plinko" class="game-container">
-      <h2>Plinko Drop</h2>
-      <canvas id="plinko-canvas" width="320" height="400"></canvas>
-      <button id="drop-plinko">Drop Ball</button>
-      <div id="plinko-result" class="result"></div>
+    <!-- Slot Machine Section -->
+    <section id="slot-section">
+      <h2>Slot Machine</h2>
+      <div class="slot-reels">
+        <div id="slot1" class="slot-reel">🍒</div>
+        <div id="slot2" class="slot-reel">🍋</div>
+        <div id="slot3" class="slot-reel">🍉</div>
+      </div>
+      <button id="slot-spin-btn">Spin</button>
+      <div id="slot-result"></div>
     </section>
-  </main>
 
-  <footer>
-    <p>Powered by Amina Coin &nbsp;|&nbsp; Cosmic Luck &nbsp;|&nbsp; Capt’s Ship 🚀</p>
-  </footer>
+    <!-- Plinko Section -->
+    <section id="plinko-section">
+      <h2>Plinko</h2>
+      <canvas id="plinko-canvas" width="400" height="400"></canvas>
+      <div id="plinko-result">Click the board to drop your chip!</div>
+    </section>
+  </div>
 
   <script src="scripts.js"></script>
 </body>
