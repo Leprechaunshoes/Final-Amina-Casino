@@ -1,79 +1,62 @@
-/* Cosmic Theme for Amina Casino */
-
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(ellipse at center, #1a0025 0%, #000000 100%);
-  color: #f0f8ff;
+  font-family: 'Trebuchet MS', sans-serif;
+  background: radial-gradient(circle at top, #000022, #110022, #000000);
+  color: #f2f2f2;
   text-align: center;
-  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
 }
 
 header {
-  padding: 30px 20px;
-  background: linear-gradient(to right, #4b0082, #000000);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  background: linear-gradient(90deg, #1f0066, #4b0082);
+  color: #ffffff;
 }
 
-header h1 {
-  font-size: 2.5rem;
-  color: #ffd700;
-  margin-bottom: 10px;
-}
-
-#wallet, #balance {
-  margin: 10px 0;
-  font-size: 1rem;
-}
-
-.toggle {
-  margin-top: 10px;
+h1 {
+  margin: 0;
+  font-size: 2rem;
 }
 
 main {
-  padding: 40px 20px;
-}
-
-section#games {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 2rem;
 }
 
 .game {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid #4b0082;
-  box-shadow: 0 0 10px #8a2be2;
+  background: #1a1a2e;
+  border: 1px solid #888;
+  border-radius: 10px;
+  padding: 1rem;
 }
 
 button {
-  padding: 12px 25px;
-  margin-top: 10px;
-  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ff9900;
   border: none;
-  border-radius: 8px;
-  background-color: #8a2be2;
   color: white;
+  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #ff69b4;
-}
-
-#donate {
-  margin-top: 50px;
-  padding: 20px;
-  border-top: 2px solid #8a2be2;
+  background: #ffcc00;
 }
 
 footer {
-  padding: 20px;
-  background-color: #0a0014;
-  color: #ccc;
+  background: #0b0b2e;
+  padding: 1rem;
   font-size: 0.9rem;
+}
+
+a {
+  color: #00ffcc;
+  text-decoration: none;
+}
+
+#modeToggle {
+  margin: 1rem;
+  font-size: 1rem;
 }
