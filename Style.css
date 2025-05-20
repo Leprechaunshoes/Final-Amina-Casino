@@ -1,53 +1,83 @@
+/* style.css */
+
 body {
-    background-color: #0a0a0a;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    text-align: center;
     margin: 0;
     padding: 0;
-}
-
-.container {
-    padding: 20px;
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(ellipse at center, #1c0030, #0b001a);
+    color: #fff;
+    text-align: center;
+    min-height: 100vh;
+    background-size: cover;
+    overflow-x: hidden;
 }
 
 h1 {
-    font-size: 3em;
-    color: #8a2be2;
-    text-shadow: 0 0 10px #8a2be2;
+    font-size: 2.5em;
+    color: #ff00ff;
+    margin-top: 20px;
+    text-shadow: 0 0 10px #ff00ff;
 }
 
 button {
-    background-color: #8a2be2;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
     font-size: 1em;
-    text-shadow: 0 0 5px #000;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #6e00aa, #ff00ff);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 0, 255, 0.4);
+    transition: transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #5e1d8a;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 0, 255, 0.6);
 }
 
-.game {
-    margin: 20px 0;
+section {
+    margin: 40px auto;
     padding: 20px;
-    border: 1px solid #8a2be2;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #8a2be2;
+    max-width: 800px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
-p {
+#slotResult, #blackjackCards, #plinkoResult, #walletStatus {
+    font-size: 1.8em;
+    margin: 20px 0;
+    color: #00ffe7;
+    text-shadow: 0 0 8px #00ffe7;
+}
+
+#modeStatus {
     font-size: 1.2em;
-    color: #8a2be2;
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 10px;
+    display: block;
 }
 
-.donate {
-    margin-top: 30px;
-    padding: 15px;
-    border-top: 1px solid #8a2be2;
+input[type=range] {
+    width: 60%;
+    margin: 10px 0;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #999;
+}
+
+#logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-top: 15px;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 20px #ff00ff;
 }
