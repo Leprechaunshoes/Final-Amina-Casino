@@ -1,56 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amina Casino - Cosmic Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Amina Casino</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="casino-container">
-    <h1>🌌 Amina Casino - Cosmic Edition 🌌</h1>
-
-    <!-- Wallet Section -->
-    <section id="wallet-section">
-      <button id="connect-wallet-btn">Connect Pera Wallet</button>
-      <div id="wallet-address">Wallet not connected</div>
-    </section>
-
-    <!-- Blackjack Section -->
-    <section id="blackjack-section">
-      <h2>Blackjack</h2>
-      <div id="blackjack-cards">
-        <div id="player-cards" class="card-area"></div>
-        <div id="dealer-cards" class="card-area"></div>
+  <header>
+    <img src="https://i.imgur.com/HBSxH7S.png" alt="Amina Coin" class="coin-logo">
+    <h1>Amina Casino 🌌</h1>
+    <div class="wallet">
+      <label class="toggle-container">
+        <input type="checkbox" id="toggle-money">
+        <span id="toggle-label">Play Money</span>
+      </label>
+      <div class="balance">
+        <strong id="currency-symbol">HC</strong>: <span id="balance-amount">1000</span>
       </div>
-      <div>
-        <button id="btn-hit">Hit</button>
-        <button id="btn-stand">Stand</button>
-        <button id="btn-new-game">New Game</button>
+      <div id="wallet-display" class="wallet-address"></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="blackjack" class="game">
+      <h2>🂡 Blackjack</h2>
+      <input type="number" id="bj-bet" value="0.25" step="0.01" min="0.25">
+      <button id="btn-bj-new">New Game</button>
+      <button id="btn-bj-hit" disabled>Hit</button>
+      <button id="btn-bj-stand" disabled>Stand</button>
+      <div class="card-area">
+        <div><strong>Dealer:</strong><div id="dealer-cards" class="cards"></div></div>
+        <div><strong>You:</strong><div id="player-cards" class="cards"></div></div>
       </div>
-      <div id="bj-result"></div>
+      <div id="bj-result" class="result-text"></div>
     </section>
 
-    <!-- Slot Machine Section -->
-    <section id="slot-section">
-      <h2>Slot Machine</h2>
-      <div class="slot-reels">
-        <div id="slot1" class="slot-reel">🍒</div>
-        <div id="slot2" class="slot-reel">🍋</div>
-        <div id="slot3" class="slot-reel">🍉</div>
+    <section id="slots" class="game">
+      <h2>🎰 Slot Machine</h2>
+      <input type="number" id="slot-bet" value="0.25" step="0.01" min="0.25">
+      <button id="btn-slot-spin">Spin</button>
+      <div class="slots-display">
+        <span id="slot1">❔</span>
+        <span id="slot2">❔</span>
+        <span id="slot3">❔</span>
       </div>
-      <button id="slot-spin-btn">Spin</button>
-      <div id="slot-result"></div>
+      <div id="slot-result" class="result-text"></div>
     </section>
 
-    <!-- Plinko Section -->
-    <section id="plinko-section">
-      <h2>Plinko</h2>
-      <canvas id="plinko-canvas" width="400" height="400"></canvas>
-      <div id="plinko-result">Click the board to drop your chip!</div>
+    <section id="plinko" class="game">
+      <h2>🪩 Plinko</h2>
+      <input type="number" id="plinko-bet" value="0.25" step="0.01" min="0.25">
+      <button id="btn-plinko-drop">Drop Chip</button>
+      <div id="plinko-board">
+        <div id="plinko-chip">⬤</div>
+      </div>
+      <div id="plinko-result" class="result-text"></div>
     </section>
-  </div>
+  </main>
+
+  <footer>
+    <button id="btn-donate">💖 Donate Amina</button>
+    <audio id="bg-music" autoplay loop>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      Your browser does not support audio.
+    </audio>
+    <button id="btn-music-toggle">🔊 Stop Music</button>
+    <p>Built with love in the cosmos.</p>
+  </footer>
 
   <script src="scripts.js"></script>
 </body>
